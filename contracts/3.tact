@@ -52,11 +52,82 @@ contract Task3 with Deployable {
   }
 
   receive(msg: TokenNotification) {
-  } 
-  
-  get fun price(token: Address): Int { 
+    let ctx: Context = context();
+    let notOwner: Bool = ctx.sender != self.owner;
+    if(ctx.sender == self.jAddressA) {
+      self.a = self.a + msg.amount;
+      if(notOwner) {
+        let amount: Int = msg.amount * self.b / self.a / self.decimal;
+        if (amount > 0){
+          send(SendParameters{
+            to: self.jAddressB,
+            value: 0,
+            bounce: false,
+            mode: SendRemainingValue + SendIgnoreErrors,
+            body: TokenTransfer{
+              queryId: 0,
+              amount: amount,
+              destination: msg.from,
+              responseDestination: null,
+              customPayload: null,
+              forwardTonAmount: 0,
+              forwardPayload: emptySlice()
+            }.toCell()
+          });
+        }
+      }
+      return;
+    } else if(ctx.sender == self.jAddressB) {
+      self.b = self.b + msg.amount;
+      if(notOwner) {
+        let amount: Int = msg.amount * self.a / self.b / self.decimal;
+        if (amount > 0) {
+          send(SendParameters{
+            to: self.jAddressA,
+            value: 0,
+            bounce: false,
+            body: TokenTransfer{
+              queryId: 0,
+              amount: amount,
+              destination: msg.from,
+              responseDestination: null,
+              customPayload: null,
+              forwardTonAmount: 0,
+              forwardPayload: emptySlice()
+            }.toCell()
+          });
+          return;
+        }
+      }
+    }
+    send(SendParameters{
+        to: ctx.sender,
+        value: 0,
+        bounce: false,
+        mode: SendRemainingValue + SendIgnoreErrors,
+        body: TokenTransfer{
+          queryId: 0,
+          amount: msg.amount,
+          destination: msg.from,
+          responseDestination: null,
+          customPayload: null,
+          forwardTonAmount: 0,
+          forwardPayload: emptySlice()
+        }.toCell()
+      });
+  }
+
+  get fun price(token: Address): Int {
+    if(token == self.jAddressA) {
+      return self.b / self.a;
+    }
+    return self.a / self.b;
   }
   
-  get fun balance(token: Address): Int { 
+  get fun balance(token: Address): Int {
+    if(token == self.jAddressA) {
+      return self.a;
+    } 
+    return self.b;
   }
 }
