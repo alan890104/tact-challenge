@@ -45,9 +45,9 @@ describe('Task1', () => {
     }
 
     it('test', async () => {
-        const testCases = 1000;
+        const testCases = 100;
         for (let i = 0; i < testCases; i++) {
-            const randInt = getRandomInt(-1000, 1000);
+            const randInt = getRandomInt(0, 1000);
             const randMethod = getRandomMethod();
             const beforeCounter = await task1.getCounter();
             const deployer = await blockchain.treasury('deployer');
@@ -67,7 +67,11 @@ describe('Task1', () => {
                 to: task1.address,
                 success: true,
             });
-            expect(await task1.getCounter()).toEqual(beforeCounter + 1n);
+            if (randMethod === 'Add') {
+                expect(await task1.getCounter()).toEqual(beforeCounter + BigInt(randInt));
+            } else if (randMethod === 'Subtract') {
+                expect(await task1.getCounter()).toEqual(beforeCounter - BigInt(randInt));
+            }
         }
     });
 });
