@@ -30,12 +30,15 @@ contract Task2 with Deployable {
       send(SendParameters{
         to: msg.sender,
         value: 0,
-        bounce: false,
-        mode: SendRemainingValue + SendIgnoreErrors
+        bounce: true,
+        mode: SendRemainingValue
       });
     }
+    else {
+      throw(0xffffff);
+    }
   }
-
+  
   receive(msg: Slice) {
     send(SendParameters{
       to: self.admin,
@@ -46,4 +49,3 @@ contract Task2 with Deployable {
     });
   }
 }
-
