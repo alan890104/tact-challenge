@@ -47,7 +47,7 @@ contract Task3 with Deployable {
     self.jAddressA = newJAddressA;
     self.jAddressB = newJAddressB;
     self.a = 0;
-    self.b = 0;
+    self.b = 0; 
     self.decimal = 1000000000;
   }
 
