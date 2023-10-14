@@ -26,7 +26,7 @@ contract Task2 with Deployable {
   }
   
   receive(msg: Refund) {
-    nativeThrowUnless(context().sender == self.admin, 0xffffff)
+    nativeThrowUnless(0xffffff, context().sender == self.admin);
     send(SendParameters{
       to: msg.sender,
       value: 0,
