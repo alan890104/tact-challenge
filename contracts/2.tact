@@ -26,13 +26,14 @@ contract Task2 with Deployable {
   }
   
   receive(msg: Refund) {
-    nativeThrowUnless(1, context().sender == self.admin);
-    send(SendParameters{
-      to: msg.sender,
-      value: 0,
-      bounce: false,
-      mode: SendRemainingValue + SendIgnoreErrors
-    });
+    if(context().sender == self.admin){
+      send(SendParameters{
+        to: msg.sender,
+        value: 0,
+        bounce: false,
+        mode: SendRemainingValue + SendIgnoreErrors
+      });
+    }
   }
 
   receive(msg: Slice) {
