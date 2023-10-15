@@ -81,6 +81,21 @@ contract Task3 with Deployable {
       } else {
         self.bAmount = self.bAmount - amountOfBJettonToSend;
         self.aAmount = self.aAmount + msg.amount;
+        send(SendParameters{
+          to: self.jettonAddressB,
+          value: 0,
+          bounce: false,
+          mode: SendRemainingValue,
+          body: TokenTransfer{
+            queryId: 0,
+            amount: amountOfBJettonToSend,
+            destination: msg.from,
+            responseDestination: null,
+            customPayload: null,
+            forwardTonAmount: 0,
+            forwardPayload: emptySlice()
+          }.toCell()
+        });
       }
     } else if (ctx.sender == self.jettonAddressB) {
       // Use B to Swap A
@@ -95,6 +110,21 @@ contract Task3 with Deployable {
       } else {
         self.aAmount = self.aAmount - amountOfAJettonToSend;
         self.bAmount = self.bAmount + msg.amount;
+        send(SendParameters{
+          to: self.jettonAddressA,
+          value: 0,
+          bounce: false,
+          mode: SendRemainingValue,
+          body: TokenTransfer{
+            queryId: 0,
+            amount: amountOfAJettonToSend,
+            destination: msg.from,
+            responseDestination: null,
+            customPayload: null,
+            forwardTonAmount: 0,
+            forwardPayload: emptySlice()
+          }.toCell()
+        });
       }
     } else {
       // received a different jetton (neither A nor B), throw an error
