@@ -72,85 +72,85 @@ contract Task3 with Deployable {
       // Use A to Swap B
       if (msg.from == self.owner) {
         self.aAmount = self.aAmount + msg.amount;
-        return;
-      }
-      let amountOfBJettonToSend: Int = (self.bAmount * self.decimal / self.aAmount) * msg.amount / self.decimal;
-      if (amountOfBJettonToSend >= self.bAmount) {
-        send(SendParameters{
-          to: self.jettonAddressA,
-          value: 0,
-          bounce: false,
-          mode: SendRemainingValue,
-          body: TokenTransfer{
-            queryId: 0,
-            amount: msg.amount,
-            destination: msg.from,
-            responseDestination: null,
-            customPayload: null,
-            forwardTonAmount: 0,
-            forwardPayload: emptySlice()
-          }.toCell()
-        });
       } else {
-        self.aAmount = self.aAmount + msg.amount;
-        self.bAmount = self.bAmount - amountOfBJettonToSend;
-        send(SendParameters{
-          to: self.jettonAddressB,
-          value: 0,
-          bounce: false,
-          mode: SendRemainingValue,
-          body: TokenTransfer{
-            queryId: 0,
-            amount: amountOfBJettonToSend,
-            destination: msg.from,
-            responseDestination: null,
-            customPayload: null,
-            forwardTonAmount: 0,
-            forwardPayload: emptySlice()
-          }.toCell()
-        });
+        let amountOfBJettonToSend: Int = (self.bAmount * self.decimal / self.aAmount) * msg.amount / self.decimal;
+        if (amountOfBJettonToSend >= self.bAmount) {
+          send(SendParameters{
+            to: self.jettonAddressA,
+            value: 0,
+            bounce: false,
+            mode: SendRemainingValue,
+            body: TokenTransfer{
+              queryId: 0,
+              amount: msg.amount,
+              destination: msg.from,
+              responseDestination: null,
+              customPayload: null,
+              forwardTonAmount: 0,
+              forwardPayload: emptySlice()
+            }.toCell()
+          });
+        } else {
+          self.aAmount = self.aAmount + msg.amount;
+          self.bAmount = self.bAmount - amountOfBJettonToSend;
+          send(SendParameters{
+            to: self.jettonAddressB,
+            value: 0,
+            bounce: false,
+            mode: SendRemainingValue,
+            body: TokenTransfer{
+              queryId: 0,
+              amount: amountOfBJettonToSend,
+              destination: msg.from,
+              responseDestination: null,
+              customPayload: null,
+              forwardTonAmount: 0,
+              forwardPayload: emptySlice()
+            }.toCell()
+          });
+        }
       }
     } else if (ctx.sender == self.jettonAddressB) {
       if (msg.from == self.owner) {
         self.bAmount = self.bAmount + msg.amount;
-        return;
-      }
-      // Use B to Swap A
-      let amountOfAJettonToSend: Int = (self.aAmount * self.decimal / self.bAmount) * msg.amount / self.decimal;
-      if (amountOfAJettonToSend >= self.aAmount) {
-        send(SendParameters{
-          to: self.jettonAddressB,
-          value: 0,
-          bounce: false,
-          mode: SendRemainingValue,
-          body: TokenTransfer{
-            queryId: 0,
-            amount: msg.amount,
-            destination: msg.from,
-            responseDestination: null,
-            customPayload: null,
-            forwardTonAmount: 0,
-            forwardPayload: emptySlice()
-          }.toCell()
-        });
       } else {
-        self.bAmount = self.bAmount + msg.amount;
-        self.aAmount = self.aAmount - amountOfAJettonToSend;
-        send(SendParameters{
-          to: self.jettonAddressA,
-          value: 0,
-          bounce: false,
-          mode: SendRemainingValue,
-          body: TokenTransfer{
-            queryId: 0,
-            amount: amountOfAJettonToSend,
-            destination: msg.from,
-            responseDestination: null,
-            customPayload: null,
-            forwardTonAmount: 0,
-            forwardPayload: emptySlice()
-          }.toCell()
-        });
+          // Use B to Swap A
+          let amountOfAJettonToSend: Int = (self.aAmount * self.decimal / self.bAmount) * msg.amount / self.decimal;
+          if (amountOfAJettonToSend >= self.aAmount) {
+            send(SendParameters{
+              to: self.jettonAddressB,
+              value: 0,
+              bounce: false,
+              mode: SendRemainingValue,
+              body: TokenTransfer{
+                queryId: 0,
+                amount: msg.amount,
+                destination: msg.from,
+                responseDestination: null,
+                customPayload: null,
+                forwardTonAmount: 0,
+                forwardPayload: emptySlice()
+              }.toCell()
+            });
+          } else {
+            self.bAmount = self.bAmount + msg.amount;
+            self.aAmount = self.aAmount - amountOfAJettonToSend;
+            send(SendParameters{
+              to: self.jettonAddressA,
+              value: 0,
+              bounce: false,
+              mode: SendRemainingValue,
+              body: TokenTransfer{
+                queryId: 0,
+                amount: amountOfAJettonToSend,
+                destination: msg.from,
+                responseDestination: null,
+                customPayload: null,
+                forwardTonAmount: 0,
+                forwardPayload: emptySlice()
+              }.toCell()
+            });
+          }
       }
     } else {
       // received a different jetton (neither A nor B), throw an error
