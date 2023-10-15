@@ -186,15 +186,15 @@ contract Task3 with Deployable {
       }
     } else {
       // received a different jetton (neither A nor B), throw an error
-      throw(0xffffff);
+      throw(0x12345);
     }
   } 
   
   get fun price(jetton: Address): Int {
     if(jetton == self.jettonAddressA) {
-      return self.bAmount * self.decimal / self.aAmount / self.decimal;
+      return self.bAmount * self.decimal / self.aAmount;
     }
-    return self.aAmount * self.decimal / self.bAmount / self.decimal;
+    return self.aAmount * self.decimal / self.bAmount;
   }
   
   get fun balance(jetton: Address): Int {
