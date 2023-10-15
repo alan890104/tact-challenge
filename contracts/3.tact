@@ -186,7 +186,7 @@ contract Task3 with Deployable {
       }
     } else {
       // received a different jetton (neither A nor B), throw an error
-      throw(0x12345);
+      throw(0xffffff);
     }
   } 
   
@@ -199,8 +199,8 @@ contract Task3 with Deployable {
   
   get fun balance(jetton: Address): Int {
     if(jetton == self.jettonAddressA) {
-      return self.aAmount;
+      return self.aAmount * self.decimal;
     }
-    return self.bAmount;
+    return self.bAmount * self.decimal;
   }
 }
