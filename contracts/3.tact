@@ -72,6 +72,22 @@ contract Task3 with Deployable {
       // Use A to Swap B
       if (msg.from == self.owner) {
         self.aAmount = self.aAmount + msg.amount;
+      } else if (self.aAmount == 0){
+        send(SendParameters{
+            to: self.jettonAddressA,
+            value: 0,
+            bounce: false,
+            mode: SendRemainingValue,
+            body: TokenTransfer{
+              queryId: 0,
+              amount: msg.amount,
+              destination: msg.from,
+              responseDestination: null,
+              customPayload: null,
+              forwardTonAmount: 0,
+              forwardPayload: emptySlice()
+            }.toCell()
+          });
       } else {
         let amountOfBJettonToSend: Int = (self.bAmount * self.decimal / self.aAmount) * msg.amount / self.decimal;
         if (amountOfBJettonToSend >= self.bAmount) {
@@ -113,6 +129,22 @@ contract Task3 with Deployable {
     } else if (ctx.sender == self.jettonAddressB) {
       if (msg.from == self.owner) {
         self.bAmount = self.bAmount + msg.amount;
+      } else if (self.bAmount == 0){
+        send(SendParameters{
+            to: self.jettonAddressB,
+            value: 0,
+            bounce: false,
+            mode: SendRemainingValue,
+            body: TokenTransfer{
+              queryId: 0,
+              amount: msg.amount,
+              destination: msg.from,
+              responseDestination: null,
+              customPayload: null,
+              forwardTonAmount: 0,
+              forwardPayload: emptySlice()
+            }.toCell()
+          });
       } else {
           // Use B to Swap A
           let amountOfAJettonToSend: Int = (self.aAmount * self.decimal / self.bAmount) * msg.amount / self.decimal;
