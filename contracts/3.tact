@@ -70,9 +70,12 @@ contract Task3 with Deployable {
     let ctx: Context = context();
     if (ctx.sender == self.jettonAddressA) {
       // Use A to Swap B
+      if (msg.from == self.owner) {
+        self.aAmount = self.aAmount + msg.amount;
+        return;
+      }
       let amountOfBJettonToSend: Int = (self.bAmount * self.decimal / self.aAmount) * msg.amount / self.decimal;
       if (amountOfBJettonToSend >= self.bAmount) {
-        self.aAmount = self.aAmount + msg.amount;
         send(SendParameters{
           to: self.jettonAddressA,
           value: 0,
@@ -89,6 +92,7 @@ contract Task3 with Deployable {
           }.toCell()
         });
       } else {
+        self.aAmount = self.aAmount + msg.amount;
         self.bAmount = self.bAmount - amountOfBJettonToSend;
         send(SendParameters{
           to: self.jettonAddressB,
@@ -107,10 +111,13 @@ contract Task3 with Deployable {
         });
       }
     } else if (ctx.sender == self.jettonAddressB) {
+      if (msg.from == self.owner) {
+        self.bAmount = self.bAmount + msg.amount;
+        return;
+      }
       // Use B to Swap A
       let amountOfAJettonToSend: Int = (self.aAmount * self.decimal / self.bAmount) * msg.amount / self.decimal;
       if (amountOfAJettonToSend >= self.aAmount) {
-        self.bAmount = self.bAmount + msg.amount;
         send(SendParameters{
           to: self.jettonAddressB,
           value: 0,
@@ -127,6 +134,7 @@ contract Task3 with Deployable {
           }.toCell()
         });
       } else {
+        self.bAmount = self.bAmount + msg.amount;
         self.aAmount = self.aAmount - amountOfAJettonToSend;
         send(SendParameters{
           to: self.jettonAddressA,
