@@ -89,7 +89,7 @@ contract Task3 with Deployable {
             }.toCell()
           });
       } else {
-        let amountOfBJettonToSend: Int = (self.bAmount * self.decimal / self.aAmount) * msg.amount / self.decimal;
+        let amountOfBJettonToSend: Int = (self.bAmount * self.decimal) * msg.amount / self.aAmount / self.decimal;
         if (amountOfBJettonToSend >= self.bAmount) {
           send(SendParameters{
             to: self.jettonAddressA,
@@ -147,7 +147,7 @@ contract Task3 with Deployable {
           });
       } else {
           // Use B to Swap A
-          let amountOfAJettonToSend: Int = (self.aAmount * self.decimal / self.bAmount) * msg.amount / self.decimal;
+          let amountOfAJettonToSend: Int = (self.aAmount * self.decimal)  * msg.amount / self.bAmount / self.decimal;
           if (amountOfAJettonToSend >= self.aAmount) {
             send(SendParameters{
               to: self.jettonAddressB,
@@ -199,8 +199,8 @@ contract Task3 with Deployable {
   
   get fun balance(jetton: Address): Int {
     if(jetton == self.jettonAddressA) {
-      return self.aAmount * self.decimal;
+      return self.aAmount;
     }
-    return self.bAmount * self.decimal;
+    return self.bAmount;
   }
 }
