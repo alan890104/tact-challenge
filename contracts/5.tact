@@ -71,6 +71,7 @@ contract Task5 with Deployable {
   owner: Address;
   nfts: map<Int as uint16, Address>;
   totalNftsHeld: Int as uint16 = 0;
+  profit: Int as coins = 0;
   
   init(seed: Int, owner: Address) {
     self.owner = owner;
@@ -122,28 +123,30 @@ contract Task5 with Deployable {
         forwardPayload: emptySlice() 
       }.toCell()
     });
+    self.profit = self.profit + ton("2");
     self.nfts.set(rndIdx, ctx.sender);
   }
 
   receive(msg: AdminWithdrawalProfit) {
     let ctx: Context = context();
     require(ctx.sender  == self.owner, "Insufficient privelegies");
-    if (myBalance() > ton("0.1")) {
+    if (self.profit > ton("0.1")) {
       send(SendParameters{
         to: self.owner,
-        value: myBalance() - ton("0.1"),
+        value: self.profit - ton("0.1"),
         bounce: false,
         mode: 0,
         body: AdminFetchProfit { 
           queryId: 0
         }.toCell()
       });
+      self.profit = ton("0.1");
     }
   }
 
   receive(msg: AdminWithdrawalAllNFTs) {
     let ctx: Context = context();
-    require(ctx.value > ton("1") + (self.totalNftsHeld + 1) * ton("0.08"), "Insufficent funds");
+    require(ctx.value > ton("1") + self.totalNftsHeld * ton("0.08"), "Insufficent funds");
     require(ctx.sender  == self.owner, "Invalid sender");
     let x: Int = self.totalNftsHeld;
     do {
@@ -167,10 +170,10 @@ contract Task5 with Deployable {
   }
 
   get fun profit(): Int {
-    if(myBalance() < ton("0.1")){
+    if(self.profit < ton("0.1")){
       return 0;
     }
-    return myBalance() - ton("0.1");
+    return self.profit - ton("0.1");
   }
   
   get fun nfts(): map<Int as uint16, Address> {
