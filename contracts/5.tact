@@ -160,9 +160,9 @@ contract Task5 with Deployable {
           forwardPayload: emptySlice() 
         }.toCell()
       });
-      self.nfts.set(x, null);
     } until (x <= 0);
     self.index = 0;
+    self.nfts = emptyMap();
   }
 
   get fun profit(): Int {
