@@ -70,19 +70,20 @@ contract Task5 with Deployable {
   seed: Int as uint128;
   owner: Address;
   nfts: map<Int as uint16, Address>;
-  index: Int as uint16 = 0;
+  totalNftsHeld: Int as uint16 = 0;
   
   init(seed: Int, owner: Address) {
     self.owner = owner;
     self.seed = seed;
   }
 
+  // This message is sent from NFTItem contract
   receive(msg: OwnershipAssigned) {
     let ctx: Context = context();
     if(msg.prevOwner == self.owner) {
       // Add NFT to collection
-      self.nfts.set(self.index, ctx.sender);
-      self.index = self.index + 1;
+      self.nfts.set(self.totalNftsHeld, ctx.sender);
+      self.totalNftsHeld = self.totalNftsHeld + 1;
       return;
     }
     if(ctx.value < ton("2.1")) {
@@ -105,7 +106,7 @@ contract Task5 with Deployable {
     }
 
     // Randomly select NFT
-    let rndIdx: Int = random(0, self.index - 1);
+    let rndIdx: Int = random(0, self.totalNftsHeld - 1);
     let nftAddrSendBack: Address = self.nfts.get(rndIdx)!!;
     send(SendParameters{
       to: nftAddrSendBack,
@@ -142,9 +143,9 @@ contract Task5 with Deployable {
 
   receive(msg: AdminWithdrawalAllNFTs) {
     let ctx: Context = context();
-    require(ctx.value > ton("1") + (self.index + 1) * ton("0.08"), "Insufficent funds");
+    require(ctx.value > ton("1") + (self.totalNftsHeld + 1) * ton("0.08"), "Insufficent funds");
     require(ctx.sender  == self.owner, "Invalid sender");
-    let x: Int = self.index;
+    let x: Int = self.totalNftsHeld;
     do {
       send(SendParameters{
         to: self.nfts.get(x)!!,
@@ -161,7 +162,7 @@ contract Task5 with Deployable {
         }.toCell()
       });
     } until (x <= 0);
-    self.index = 0;
+    self.totalNftsHeld = 0;
     self.nfts = emptyMap();
   }
 
