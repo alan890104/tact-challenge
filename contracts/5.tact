@@ -23,7 +23,7 @@ import "@stdlib/deploy";
    - SC should be able to withdraw all NFTs by a single message from admin
   * OwnershipAssigned 
    - if prevOwner is the owner's (admin) address, then add NFT to the collection
-   - if value of TON attached is less then 2.1 TON then stop execution and return NFT back,
+   - if value of TON attached is less than 2.1 TON then stop execution and return NFT back,
      but only in case that TON attached is enough to process refund without losing TONs on the SC's balance
    - randomly select NFT to send from all the NFTs that smart contract has
    - send the selected NFT to the sender with all remaining balance (except for admin profit = fees collected from this and other swaps)
@@ -89,9 +89,9 @@ contract Task5 with Deployable {
       // Send NFT back
       send(SendParameters{
         to: ctx.sender,
-        value: ctx.value - ton("2"),
+        value: 0,
         bounce: false,
-        mode: 0,
+        mode: SendRemainingValue,
         body: Transfer { 
           queryId: 0,            
           newOwner: msg.prevOwner, 
@@ -106,9 +106,9 @@ contract Task5 with Deployable {
 
     // Randomly select NFT
     let rndIdx: Int = random(0, self.index - 1);
-    let nftAddr: Address = self.nfts.get(rndIdx)!!;
+    let nftAddrSendBack: Address = self.nfts.get(rndIdx)!!;
     send(SendParameters{
-      to: nftAddr,
+      to: nftAddrSendBack,
       value: ctx.value - ton("2"),
       bounce: false,
       mode: 0,
