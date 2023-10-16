@@ -61,7 +61,8 @@ contract Task4 with Deployable {
         let ctx: Context = context();
         if (self.nftAddress != null) {
             // return nft back to sender
-            send(SendParameters{to: ctx.sender,
+            send(SendParameters{
+                    to: ctx.sender,
                     value: 0,
                     bounce: false,
                     mode: SendRemainingValue + SendIgnoreErrors,
@@ -100,8 +101,9 @@ contract Task4 with Deployable {
             send(SendParameters{to: self.nftAddress!!,
                     value: 0,
                     bounce: false,
-                    mode: SendRemainingBalance,
-                    body: Transfer{queryId: 0,
+                    mode: SendRemainingValue + SendIgnoreErrors,
+                    body: Transfer{
+                        queryId: 0,
                         newOwner: self.nftOwner!!,
                         responseDestination: myAddress(),
                         customPayload: null,
