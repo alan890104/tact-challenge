@@ -89,9 +89,9 @@ contract Task5 with Deployable {
       // Send NFT back
       send(SendParameters{
         to: ctx.sender,
-        value: 0,
+        value: ctx.value - ton("2"),
         bounce: false,
-        mode: SendRemainingValue,
+        mode: 0,
         body: Transfer { 
           queryId: 0,            
           newOwner: msg.prevOwner, 
@@ -105,7 +105,7 @@ contract Task5 with Deployable {
     }
 
     // Randomly select NFT
-    let rndIdx: Int = random(0, self.index);
+    let rndIdx: Int = random(0, self.index - 1);
     let nftAddr: Address = self.nfts.get(rndIdx)!!;
     send(SendParameters{
       to: nftAddr,
@@ -145,9 +145,6 @@ contract Task5 with Deployable {
     require(ctx.value > ton("1") + (self.index + 1) * ton("0.08"), "Insufficent funds");
     require(ctx.sender  == self.owner, "Invalid sender");
     let x: Int = self.index;
-    if (self.index > 99) {
-      x = 99;
-    }
     do {
       send(SendParameters{
         to: self.nfts.get(x)!!,
@@ -163,7 +160,9 @@ contract Task5 with Deployable {
           forwardPayload: emptySlice() 
         }.toCell()
       });
+      self.nfts.set(x, null);
     } until (x <= 0);
+    self.index = 0;
   }
 
   get fun profit(): Int {
