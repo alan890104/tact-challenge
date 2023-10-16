@@ -26,7 +26,7 @@ import "@stdlib/deploy";
    - get the owner of the locked nft (that came from OwnershipAssigned as prevOwner)
 */
 
-const DEFAULT_TON_VALUE: Int = ton("0.05"); // TODO: Change this
+const DEFAULT_TON_VALUE: Int = ton("0"); // TODO: Change this
 
 message(0x05138d91) OwnershipAssigned {
     queryId: Int as uint64;
@@ -118,9 +118,6 @@ contract Task4 with Deployable {
     }
 
     get fun time(): Int {
-        if (self.lockEndTime == 0 || self.lockEndTime > now()) {
-            return 0;
-        }
         return self.lockEndTime - now();
     }
 
