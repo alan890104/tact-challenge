@@ -26,7 +26,7 @@ import "@stdlib/deploy";
    - get the owner of the locked nft (that came from OwnershipAssigned as prevOwner)
 */
 
-const DEFAULT_TON_VALUE: Int = ton("0"); // TODO: Change this
+const DEFAULT_TON_VALUE: Int = ton("0.05"); // TODO: Change this
 
 message(0x05138d91) OwnershipAssigned {
     queryId: Int as uint64;
@@ -101,7 +101,7 @@ contract Task4 with Deployable {
                 to: self.nftAddress!!,
                 value: 0,
                 bounce: false,
-                mode: SendRemainingBalance,
+                mode: SendRemainingValue,
                 body: Transfer{
                     queryId: 0,
                     newOwner: self.nftOwner!!,
