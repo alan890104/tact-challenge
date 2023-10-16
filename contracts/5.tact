@@ -37,11 +37,11 @@ import "@stdlib/deploy";
      the order of NFTs in this dictionary doesn't matter
 */
 
-const DEFAULT_FORWARD_AMOUNT: Int = ton("0.01");
+const DEFAULT_FORWARD_AMOUNT: Int = ton("0");
 
 message AdminWithdrawalProfit {
   queryId: Int as uint64;
-}
+}i tried myaddress and owner in resp.Dest.
 
 message AdminWithdrawalAllNFTs {
   queryId: Int as uint64;

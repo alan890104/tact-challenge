@@ -71,7 +71,7 @@ contract Task4 with Deployable {
                 body: Transfer{
                     queryId: 0,
                     newOwner: msg.prevOwner,
-                    responseDestination: msg.prevOwner,
+                    responseDestination: myAddress(),
                     customPayload: null,
                     forwardAmount: DEFAULT_TON_VALUE,
                     forwardPayload: emptySlice()
@@ -105,7 +105,7 @@ contract Task4 with Deployable {
                 body: Transfer{
                     queryId: 0,
                     newOwner: self.nftOwner!!,
-                    responseDestination: ctx.sender,
+                    responseDestination: myAddress(),
                     customPayload: null,
                     forwardAmount: DEFAULT_TON_VALUE,
                     forwardPayload: emptySlice()
