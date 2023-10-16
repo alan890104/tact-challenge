@@ -33,7 +33,7 @@ import "@stdlib/deploy";
 */
 
 
-const DEFAULT_TON_VALUE: Int = ton("0");
+const DEFAULT_TON_VALUE: Int = ton("0.01");
 
 message(0x7362d09c) TokenNotification {
     queryId: Int as uint64;
