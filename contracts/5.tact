@@ -115,7 +115,7 @@ contract Task5 with Deployable {
     let nftAddrSendBack: Address = self.nfts.get(rndIdx)!!;
     send(SendParameters{
       to: nftAddrSendBack,
-      value: ctx.value - ton("2.1"),
+      value: ctx.value - ton("2"),
       bounce: false,
       mode: 0,
       body: Transfer { 
@@ -151,9 +151,8 @@ contract Task5 with Deployable {
     // 1 = 0.01 * 100 -> maybe forward ton amount
     require(ctx.value > ton("1") + self.totalNftsHeld * ton("0.08"), "Insufficent funds");
     require(ctx.sender  == self.owner, "Invalid sender");
-    let x: Int = self.totalNftsHeld;
-    while(x > 0) {
-      x = x - 1;
+    let x: Int = 0;
+    while(x < self.totalNftsHeld) {
       send(SendParameters{
         to: self.nfts.get(x)!!,
         value: ton("0.08"),
@@ -168,6 +167,7 @@ contract Task5 with Deployable {
           forwardPayload: emptySlice() 
         }.toCell()
       });
+      x = x + 1;
     }
     self.totalNftsHeld = 0;
     self.nfts = emptyMap();
