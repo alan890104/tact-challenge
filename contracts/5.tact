@@ -109,40 +109,40 @@ contract Task5 with Deployable {
     //   return;
     // }
 
-    // // Randomly select NFT
-    // let rndIdx: Int = random(0, self.totalNftsHeld);
-    // if (rndIdx == self.totalNftsHeld) {
-    //   send(SendParameters{
-    //     to: ctx.sender,
-    //     value: ctx.value - ton("2"),
-    //     bounce: false,
-    //     mode: 0,
-    //     body: Transfer { 
-    //       queryId: 0,            
-    //       newOwner: msg.prevOwner, 
-    //       responseDestination: myAddress(), 
-    //       customPayload: null, 
-    //       forwardAmount: DEFAULT_FORWARD_AMOUNT, 
-    //       forwardPayload: emptySlice() 
-    //     }.toCell()
-    //   });
-    // } else {
-    //   send(SendParameters{
-    //     to: self.nfts.get(rndIdx)!!,
-    //     value: ctx.value - ton("2"),
-    //     bounce: false,
-    //     mode: 0,
-    //     body: Transfer { 
-    //       queryId: 0,            
-    //       newOwner: msg.prevOwner, 
-    //       responseDestination: myAddress(), 
-    //       customPayload: null, 
-    //       forwardAmount: DEFAULT_FORWARD_AMOUNT, 
-    //       forwardPayload: emptySlice() 
-    //     }.toCell()
-    //   });
-    //   self.nfts.set(rndIdx, ctx.sender);
-    // }
+    // Randomly select NFT
+    let rndIdx: Int = random(0, self.totalNftsHeld);
+    if (rndIdx == self.totalNftsHeld) {
+      send(SendParameters{
+        to: ctx.sender,
+        value: ctx.value - ton("2"),
+        bounce: false,
+        mode: 0,
+        body: Transfer { 
+          queryId: 0,            
+          newOwner: msg.prevOwner, 
+          responseDestination: myAddress(), 
+          customPayload: null, 
+          forwardAmount: DEFAULT_FORWARD_AMOUNT, 
+          forwardPayload: emptySlice() 
+        }.toCell()
+      });
+    } else {
+      send(SendParameters{
+        to: self.nfts.get(rndIdx)!!,
+        value: ctx.value - ton("2"),
+        bounce: false,
+        mode: 0,
+        body: Transfer { 
+          queryId: 0,            
+          newOwner: msg.prevOwner, 
+          responseDestination: myAddress(), 
+          customPayload: null, 
+          forwardAmount: DEFAULT_FORWARD_AMOUNT, 
+          forwardPayload: emptySlice() 
+        }.toCell()
+      });
+      self.nfts.set(rndIdx, ctx.sender);
+    }
   }
 
   receive(msg: AdminWithdrawalProfit) {
