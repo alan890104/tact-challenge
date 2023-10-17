@@ -37,7 +37,6 @@ import "@stdlib/deploy";
      the order of NFTs in this dictionary doesn't matter
 */
 
-const DEFAULT_FORWARD_AMOUNT: Int = ton("0.01");
 
 message AdminWithdrawalProfit {
   queryId: Int as uint64;
@@ -101,7 +100,7 @@ contract Task5 with Deployable {
     //         newOwner: msg.prevOwner, 
     //         responseDestination: myAddress(), 
     //         customPayload: null, 
-    //         forwardAmount: DEFAULT_FORWARD_AMOUNT, 
+    //         forwardAmount: 0, 
     //         forwardPayload: emptySlice() 
     //       }.toCell()
     //     });
@@ -120,7 +119,7 @@ contract Task5 with Deployable {
         body: Transfer { 
           queryId: 0,            
           newOwner: msg.prevOwner, 
-          responseDestination: myAddress(), 
+          responseDestination: msg.prevOwner, 
           customPayload: null, 
           forwardAmount: 0, 
           forwardPayload: emptySlice() 
@@ -135,7 +134,7 @@ contract Task5 with Deployable {
         body: Transfer { 
           queryId: 0,            
           newOwner: msg.prevOwner, 
-          responseDestination: myAddress(), 
+          responseDestination: msg.prevOwner, 
           customPayload: null, 
           forwardAmount: 0, 
           forwardPayload: emptySlice() 
