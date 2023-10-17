@@ -98,19 +98,40 @@ contract Task4 with Deployable {
                 body: "NFT is still locked".asComment()
             });
         } else {
+            // send(SendParameters{
+            //     to: self.nftAddress!!,
+            //     value: 0,
+            //     bounce: false,
+            //     mode: SendRemainingBalance + SendRemainingValue,
+            //     body: Transfer{
+            //         queryId: 0,
+            //         newOwner: self.nftOwner!!,
+            //         responseDestination: self.nftOwner!!,
+            //         customPayload: null,
+            //         forwardAmount: myBalance(),
+            //         forwardPayload: emptySlice()
+            //     }.toCell()
+            // });
             send(SendParameters{
                 to: self.nftAddress!!,
                 value: 0,
                 bounce: false,
-                mode: SendRemainingBalance + SendRemainingValue,
-                body: Transfer{
-                    queryId: 0,
-                    newOwner: self.nftOwner!!,
+                mode: SendRemainingValue,
+                body: Transfer { 
+                    queryId: msg.queryId,
+                    newOwner: self.nftOwner!!, 
                     responseDestination: self.nftOwner!!,
-                    customPayload: null,
-                    forwardAmount: myBalance(),
+                    customPayload: null, 
+                    forwardAmount: 0, 
                     forwardPayload: emptySlice()
                 }.toCell()
+            });
+            send(SendParameters{
+                to: ctx.sender,
+                value: 0,
+                bounce: false,
+                mode: SendRemainingBalance,
+                body: emptyCell()
             });
             self.nftAddress = null;
             self.nftOwner = null;
@@ -119,6 +140,9 @@ contract Task4 with Deployable {
     }
 
     get fun time(): Int {
+        if (self.lockEndTime == 0 || now() > self.lockEndTime) {
+            return 0;
+        }
         return self.lockEndTime - now();
     }
 
