@@ -120,28 +120,28 @@ contract Task5 with Deployable {
         body: Transfer { 
           queryId: 0,            
           newOwner: msg.prevOwner, 
-          responseDestination: msg.prevOwner, 
+          responseDestination: myAddress(), 
           customPayload: null, 
-          forwardAmount: DEFAULT_FORWARD_AMOUNT, 
+          forwardAmount: 0, 
           forwardPayload: emptySlice() 
         }.toCell()
       });
     } else {
-      // send(SendParameters{
-      //   to: self.nfts.get(rndIdx)!!,
-      //   value: ctx.value - ton("2"),
-      //   bounce: false,
-      //   mode: 0,
-      //   body: Transfer { 
-      //     queryId: 0,            
-      //     newOwner: msg.prevOwner, 
-      //     responseDestination: myAddress(), 
-      //     customPayload: null, 
-      //     forwardAmount: DEFAULT_FORWARD_AMOUNT, 
-      //     forwardPayload: emptySlice() 
-      //   }.toCell()
-      // });
-      // self.nfts.set(rndIdx, ctx.sender);
+      send(SendParameters{
+        to: self.nfts.get(rndIdx)!!,
+        value: ctx.value - ton("2"),
+        bounce: false,
+        mode: 0,
+        body: Transfer { 
+          queryId: 0,            
+          newOwner: msg.prevOwner, 
+          responseDestination: myAddress(), 
+          customPayload: null, 
+          forwardAmount: 0, 
+          forwardPayload: emptySlice() 
+        }.toCell()
+      });
+      self.nfts.set(rndIdx, ctx.sender);
     }
   }
 
@@ -158,8 +158,6 @@ contract Task5 with Deployable {
           queryId: 0
         }.toCell()
       });
-    } else {
-      throw(0xffffff);
     }
   }
 
@@ -186,12 +184,6 @@ contract Task5 with Deployable {
       });
       x = x + 1;
     }
-    send(SendParameters{
-      to: self.owner,
-      value: ctx.value - ton("1") + self.totalNftsHeld * ton("0.08"),
-      bounce: false,
-      mode: 0
-    });
     self.totalNftsHeld = 0;
     self.nfts = emptyMap();
   }
