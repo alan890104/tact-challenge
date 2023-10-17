@@ -89,7 +89,8 @@ contract Task5 with Deployable {
 
     if(ctx.value < ton("2.1")) {
       // Send NFT back
-      send(SendParameters{
+      if (ctx.value >= ton("0.1")){
+        send(SendParameters{
           to: ctx.sender,
           value: 0, // TODO Not sure if this is correct
           bounce: false,
@@ -103,6 +104,7 @@ contract Task5 with Deployable {
             forwardPayload: emptySlice() 
           }.toCell()
         });
+      }
       return;
     }
 
