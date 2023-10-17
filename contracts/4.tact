@@ -26,8 +26,6 @@ import "@stdlib/deploy";
    - get the owner of the locked nft (that came from OwnershipAssigned as prevOwner)
 */
 
-const DEFAULT_TON_VALUE: Int = ton("0.01"); // TODO: Change this
-
 message(0x05138d91) OwnershipAssigned {
     queryId: Int as uint64;
     prevOwner: Address;
@@ -59,27 +57,26 @@ contract Task4 with Deployable {
         self.seed = seed;
     }
 
-    receive(msg: OwnershipAssigned){
-        let ctx: Context = context();
-        if (self.nftAddress != null) {
+    receive(msg: OwnershipAssigned) {
+        if(self.nftAddress != null) {
             // return nft back to sender
             send(SendParameters{
-                to: ctx.sender,
+                to: sender(),
                 value: 0,
                 bounce: false,
                 mode: SendRemainingValue,
-                body: Transfer{
-                    queryId: 0,
-                    newOwner: msg.prevOwner,
-                    responseDestination: myAddress(),
-                    customPayload: null,
-                    forwardAmount: 0,
+                body: Transfer { 
+                    queryId: msg.queryId,
+                    newOwner: msg.prevOwner, 
+                    responseDestination: myAddress(), 
+                    customPayload: null, 
+                    forwardAmount: 0, 
                     forwardPayload: emptySlice()
                 }.toCell()
             });
         } else {
             let payload: Slice = msg.forwardPayload;
-            self.nftAddress = ctx.sender;
+            self.nftAddress = sender();
             self.lockEndTime = payload.loadUint(32) + now();
             self.nftOwner = msg.prevOwner;
         }
