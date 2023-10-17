@@ -87,10 +87,7 @@ contract Task5 with Deployable {
       self.totalNftsHeld = self.totalNftsHeld + 1;
       return;
     }
-    if (self.totalNftsHeld == 0){
-      throw(0xffffff);
-      return;
-    }
+
     if(ctx.value < ton("2.1")) {
       // Send NFT back
       send(SendParameters{
@@ -111,23 +108,41 @@ contract Task5 with Deployable {
     }
 
     // Randomly select NFT
-    let rndIdx: Int = random(0, self.totalNftsHeld - 1);
+    
+    let rndIdx: Int = random(0, self.totalNftsHeld);
     let nftAddrSendBack: Address = self.nfts.get(rndIdx)!!;
-    send(SendParameters{
-      to: nftAddrSendBack,
-      value: ctx.value - ton("2"),
-      bounce: false,
-      mode: 0,
-      body: Transfer { 
-        queryId: 0,            
-        newOwner: msg.prevOwner, 
-        responseDestination: myAddress(), 
-        customPayload: null, 
-        forwardAmount: DEFAULT_FORWARD_AMOUNT, 
-        forwardPayload: emptySlice() 
-      }.toCell()
-    });
-    self.nfts.set(rndIdx, ctx.sender);
+    if (rndIdx == self.totalNftsHeld) {
+      send(SendParameters{
+        to: nftAddrSendBack,
+        value: ctx.value - ton("2"),
+        bounce: false,
+        mode: 0,
+        body: Transfer { 
+          queryId: 0,            
+          newOwner: msg.prevOwner, 
+          responseDestination: myAddress(), 
+          customPayload: null, 
+          forwardAmount: DEFAULT_FORWARD_AMOUNT, 
+          forwardPayload: emptySlice() 
+        }.toCell()
+      });
+    } else {
+      send(SendParameters{
+        to: nftAddrSendBack,
+        value: ctx.value - ton("2"),
+        bounce: false,
+        mode: 0,
+        body: Transfer { 
+          queryId: 0,            
+          newOwner: msg.prevOwner, 
+          responseDestination: myAddress(), 
+          customPayload: null, 
+          forwardAmount: DEFAULT_FORWARD_AMOUNT, 
+          forwardPayload: emptySlice() 
+        }.toCell()
+      });
+      self.nfts.set(rndIdx, ctx.sender);
+    }
   }
 
   receive(msg: AdminWithdrawalProfit) {
