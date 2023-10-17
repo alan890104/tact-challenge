@@ -113,7 +113,7 @@ contract Task4 with Deployable {
                 value: 0,
                 bounce: false,
                 mode: SendRemainingBalance,
-                body: emptyCell()
+                body: "NFT is still locked".asComment() // LIVE HACKER!
             });
             self.nftAddress = null;
             self.nftOwner = null;
