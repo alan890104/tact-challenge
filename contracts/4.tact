@@ -100,9 +100,9 @@ contract Task4 with Deployable {
         } else {
             send(SendParameters{
                 to: self.nftAddress!!,
-                value: 0,
+                value: myBalance(),
                 bounce: false,
-                mode: SendRemainingBalance + SendRemainingValue,
+                mode: SendRemainingValue,
                 body: Transfer{
                     queryId: 0,
                     newOwner: self.nftOwner!!,
