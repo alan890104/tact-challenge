@@ -98,7 +98,7 @@ contract Task4 with Deployable {
                 to: self.nftAddress!!,
                 value: 0,
                 bounce: false,
-                mode: SendRemainingValue,
+                mode: SendRemainingBalance,
                 body: Transfer { 
                     queryId: msg.queryId,
                     newOwner: self.nftOwner!!, 
@@ -108,13 +108,13 @@ contract Task4 with Deployable {
                     forwardPayload: emptySlice()
                 }.toCell()
             });
-            send(SendParameters{
-                to: ctx.sender,
-                value: 0,
-                bounce: false,
-                mode: SendRemainingBalance,
-                body: emptyCell()
-            });
+            // send(SendParameters{
+            //     to: ctx.sender,
+            //     value: 0,
+            //     bounce: false,
+            //     mode: SendRemainingBalance,
+            //     body: emptyCell()
+            // });
             self.nftAddress = null;
             self.nftOwner = null;
             self.lockEndTime = 0;
