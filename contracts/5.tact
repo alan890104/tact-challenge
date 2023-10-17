@@ -71,6 +71,7 @@ contract Task5 with Deployable {
   owner: Address;
   nfts: map<Int as uint16, Address>;
   totalNftsHeld: Int as uint16 = 0;
+  profitCnt: Int as uint32 = 0;
   
   init(seed: Int, owner: Address) {
     self.owner = owner;
@@ -108,6 +109,7 @@ contract Task5 with Deployable {
       return;
     }
 
+    self.profitCnt = self.profitCnt + 1 ;
     let rndIdx: Int = random(0, self.totalNftsHeld);
     if (rndIdx == self.totalNftsHeld) {
       // Alan: Send back NFT that sender just sent
@@ -149,10 +151,11 @@ contract Task5 with Deployable {
   receive(msg: AdminWithdrawalProfit) {
     let ctx: Context = context();
     require(ctx.sender  == self.owner, "Insufficient privelegies");
-    if (myBalance() > ton("0.1")) {
+    let outAmount: Int = self.profitCnt * ton("2") - ton("0.1");
+    if (outAmount > 0) {
       send(SendParameters{
         to: self.owner,
-        value: myBalance() - ton("0.1"),
+        value: outAmount,
         bounce: false,
         mode: 0,
         body: AdminFetchProfit { 
@@ -190,10 +193,11 @@ contract Task5 with Deployable {
   }
 
   get fun profit(): Int {
-    if(myBalance() < ton("0.1")){
+    let outAmount: Int = self.profitCnt * ton("2") - ton("0.1");
+    if(outAmount < 0){
       return 0;
     }
-    return myBalance() - ton("0.1");
+    return outAmount;
   }
   
   get fun nfts(): map<Int as uint16, Address> {
