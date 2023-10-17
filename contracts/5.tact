@@ -163,7 +163,7 @@ contract Task5 with Deployable {
           newOwner: self.owner, 
           responseDestination: myAddress(),
           customPayload: null, 
-          forwardAmount: DEFAULT_FORWARD_AMOUNT, 
+          forwardAmount: 0, 
           forwardPayload: emptySlice() 
         }.toCell()
       });
