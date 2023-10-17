@@ -82,11 +82,12 @@ contract Task4 with Deployable {
     }   
 
 receive(msg: NftWithdrawal) {
-    let ctx: Context  = context();
-    require(ctx.sender == self.nftOwner, "Invalid sender");
+    // let ctx: Context  = context();
+    let sender: Address = sender();
+    require(sender == self.nftOwner, "Invalid sender");
     if (now() < self.lockEndTime) {
         send(SendParameters{
-            to: ctx.sender,
+            to: sender,
             value: 0,
             bounce: false,
             mode: SendRemainingValue,
@@ -109,7 +110,7 @@ receive(msg: NftWithdrawal) {
             }.toCell()
         });
         send(SendParameters{
-            to: ctx.sender,
+            to: sender,
             value: 0,
             bounce: true,
             mode: SendRemainingBalance,
