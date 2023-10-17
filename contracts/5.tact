@@ -115,7 +115,7 @@ contract Task5 with Deployable {
     let nftAddrSendBack: Address = self.nfts.get(rndIdx)!!;
     send(SendParameters{
       to: nftAddrSendBack,
-      value: ctx.value - ton("2"),
+      value: ctx.value - ton("2.1"),
       bounce: false,
       mode: 0,
       body: Transfer { 
