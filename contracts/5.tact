@@ -87,6 +87,10 @@ contract Task5 with Deployable {
       self.totalNftsHeld = self.totalNftsHeld + 1;
       return;
     }
+    if (self.totalNftsHeld == 0){
+      throw(0xffffff);
+      return;
+    }
     if(ctx.value < ton("2.1")) {
       // Send NFT back
       send(SendParameters{
