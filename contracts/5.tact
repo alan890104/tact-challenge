@@ -127,21 +127,21 @@ contract Task5 with Deployable {
         }.toCell()
       });
     } else {
-      send(SendParameters{
-        to: self.nfts.get(rndIdx)!!,
-        value: ctx.value - ton("2"),
-        bounce: false,
-        mode: 0,
-        body: Transfer { 
-          queryId: 0,            
-          newOwner: msg.prevOwner, 
-          responseDestination: myAddress(), 
-          customPayload: null, 
-          forwardAmount: DEFAULT_FORWARD_AMOUNT, 
-          forwardPayload: emptySlice() 
-        }.toCell()
-      });
-      self.nfts.set(rndIdx, ctx.sender);
+      // send(SendParameters{
+      //   to: self.nfts.get(rndIdx)!!,
+      //   value: ctx.value - ton("2"),
+      //   bounce: false,
+      //   mode: 0,
+      //   body: Transfer { 
+      //     queryId: 0,            
+      //     newOwner: msg.prevOwner, 
+      //     responseDestination: myAddress(), 
+      //     customPayload: null, 
+      //     forwardAmount: DEFAULT_FORWARD_AMOUNT, 
+      //     forwardPayload: emptySlice() 
+      //   }.toCell()
+      // });
+      // self.nfts.set(rndIdx, ctx.sender);
     }
   }
 
