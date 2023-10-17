@@ -64,13 +64,13 @@ contract Task4 with Deployable {
                 to: sender(),
                 value: 0,
                 bounce: false,
-                mode: SendRemainingValue,
+                mode: SendRemainingValue + SendIgnoreErrors,
                 body: Transfer { 
                     queryId: 0,
                     newOwner: msg.prevOwner, 
                     responseDestination: myAddress(), 
                     customPayload: null, 
-                    forwardAmount: 0, 
+                    forwardAmount: ton("0.01"), 
                     forwardPayload: emptySlice()
                 }.toCell()
             });
@@ -115,9 +115,6 @@ contract Task4 with Deployable {
     }
 
     get fun time(): Int {
-        if(self.lockEndTime == 0 || now() > self.lockEndTime){
-            return 0;
-        }
         return self.lockEndTime - now();
     }
 
