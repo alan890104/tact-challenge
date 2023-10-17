@@ -169,6 +169,12 @@ contract Task5 with Deployable {
       });
       x = x + 1;
     }
+    send(SendParameters{
+      to: self.owner,
+      value: ctx.value - ton("1") + self.totalNftsHeld * ton("0.08"),
+      bounce: false,
+      mode: 0
+    });
     self.totalNftsHeld = 0;
     self.nfts = emptyMap();
   }
