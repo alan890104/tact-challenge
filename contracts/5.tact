@@ -108,12 +108,10 @@ contract Task5 with Deployable {
     }
 
     // Randomly select NFT
-    
     let rndIdx: Int = random(0, self.totalNftsHeld);
-    let nftAddrSendBack: Address = self.nfts.get(rndIdx)!!;
     if (rndIdx == self.totalNftsHeld) {
       send(SendParameters{
-        to: nftAddrSendBack,
+        to: ctx.sender,
         value: ctx.value - ton("2"),
         bounce: false,
         mode: 0,
@@ -128,7 +126,7 @@ contract Task5 with Deployable {
       });
     } else {
       send(SendParameters{
-        to: nftAddrSendBack,
+        to: self.nfts.get(rndIdx)!!,
         value: ctx.value - ton("2"),
         bounce: false,
         mode: 0,
@@ -158,6 +156,8 @@ contract Task5 with Deployable {
           queryId: 0
         }.toCell()
       });
+    } else {
+      throw(0xffffff);
     }
   }
 
