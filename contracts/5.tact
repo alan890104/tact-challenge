@@ -87,6 +87,8 @@ contract Task5 with Deployable {
       return;
     }
 
+    // - TASK: if value of TON attached is less than 2.1 TON then stop execution and return NFT back,
+    //   but only in case that TON attached is enough to process refund without losing TONs on the SC's balance
     if(ctx.value < ton("2.1")) {
       // Send NFT back
       send(SendParameters{
@@ -105,13 +107,17 @@ contract Task5 with Deployable {
         });
     }
 
-    // Randomly select NFT
+    // 1. TASK: randomly select NFT to send from all the NFTs that smart contract has
+    // 
+    // 2. TASK: the contract's balance should increase by exactly 2 TON
+    //    some incoming TONs will be consumed for gas
+    //     some incoming TONs will be consumed for gas and the remainings of the incoming TONs should be refunded to the sender
     let rndIdx: Int = random(0, self.totalNftsHeld);
     if (rndIdx == self.totalNftsHeld) {
-      // Send back NFT that sender just sent
+      // Alan: Send back NFT that sender just sent
       send(SendParameters{
         to: ctx.sender,
-        value: ctx.value - ton("2"), // Preserve 2 TON for admin profit
+        value: ctx.value - ton("2"), // Alan: Preserve 2 TON for admin profit
         bounce: false,
         mode: 0,
         body: Transfer { 
@@ -124,10 +130,10 @@ contract Task5 with Deployable {
         }.toCell()
       });
     } else {
-      // Send the selected NFT to the sender
+      // Alan: Send the selected NFT to the sender
       send(SendParameters{
         to: self.nfts.get(rndIdx)!!,
-        value: ctx.value - ton("2"), // Preserve 2 TON for admin profit
+        value: ctx.value - ton("2"), // Alan: Preserve 2 TON for admin profit
         bounce: false,
         mode: 0,
         body: Transfer { 
@@ -139,7 +145,7 @@ contract Task5 with Deployable {
           forwardPayload: emptySlice() 
         }.toCell()
       });
-      // Replace selected NFT with the one that sender just sent
+      // Alan: Replace selected NFT with the one that sender just sent
       self.nfts.set(rndIdx, ctx.sender);
     }
   }
