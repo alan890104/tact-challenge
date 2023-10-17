@@ -60,7 +60,7 @@ contract Task4 with Deployable {
         if(self.nftAddress != null) {
             // return nft back to sender
             send(SendParameters{
-                to: context().sender, // TODO Needs to change it to sender(), bug get different result in tests
+                to: sender(),
                 value: 0,
                 bounce: false,
                 mode: SendRemainingValue,
@@ -75,7 +75,7 @@ contract Task4 with Deployable {
             });
         } else {
             let payload: Slice = msg.forwardPayload;
-            self.nftAddress = context().sender;
+            self.nftAddress = sender();
             self.lockEndTime = payload.loadUint(32) + now();
             self.nftOwner = msg.prevOwner;
         }
@@ -123,6 +123,9 @@ receive(msg: NftWithdrawal) {
 }
 
     get fun time(): Int {
+        if (self.lockEndTime == 0 || now() > self.lockEndTime) {
+            return 0;
+        }
         return self.lockEndTime - now();
     }
 
