@@ -152,7 +152,7 @@ contract Task5 with Deployable {
     require(ctx.value > ton("1") + self.totalNftsHeld * ton("0.08"), "Insufficent funds");
     require(ctx.sender  == self.owner, "Invalid sender");
     let x: Int = self.totalNftsHeld;
-    do {
+    while(x > 0) {
       x = x - 1;
       send(SendParameters{
         to: self.nfts.get(x)!!,
@@ -168,7 +168,7 @@ contract Task5 with Deployable {
           forwardPayload: emptySlice() 
         }.toCell()
       });
-    } until (x <= 0);
+    }
     self.totalNftsHeld = 0;
     self.nfts = emptyMap();
   }
