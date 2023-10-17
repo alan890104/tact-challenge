@@ -70,8 +70,8 @@ contract Task3 with Deployable {
   }
 
   receive(msg: TokenNotification) {
-    let ctx: Context = context();
-    if (ctx.sender == self.jettonAddressA) {
+    let sender: Address = sender();
+    if (sender == self.jettonAddressA) {
       // Use A to Swap B
       if (msg.from == self.owner) {
         self.aAmount = self.aAmount + msg.amount;
@@ -113,7 +113,7 @@ contract Task3 with Deployable {
           }.toCell()
         });
       }
-    } else if (ctx.sender == self.jettonAddressB) {
+    } else if (sender == self.jettonAddressB) {
       if (msg.from == self.owner) {
         self.bAmount = self.bAmount + msg.amount;
         return;

@@ -87,33 +87,31 @@ contract Task5 with Deployable {
       return;
     }
 
-    // if(ctx.value < ton("2.1")) {
-    //   // Send NFT back
-    //   if (ctx.value >= ton("0.1")) {
-    //     send(SendParameters{
-    //       to: ctx.sender,
-    //       value: 0,
-    //       bounce: false,
-    //       mode: SendRemainingValue,
-    //       body: Transfer { 
-    //         queryId: 0,            
-    //         newOwner: msg.prevOwner, 
-    //         responseDestination: myAddress(), 
-    //         customPayload: null, 
-    //         forwardAmount: 0, 
-    //         forwardPayload: emptySlice() 
-    //       }.toCell()
-    //     });
-    //   }
-    //   return;
-    // }
+    if(ctx.value < ton("2.1")) {
+      // Send NFT back
+      send(SendParameters{
+          to: ctx.sender,
+          value: 0,
+          bounce: false,
+          mode: SendRemainingValue,
+          body: Transfer { 
+            queryId: 0,            
+            newOwner: msg.prevOwner, 
+            responseDestination: msg.prevOwner, 
+            customPayload: null, 
+            forwardAmount: 0, 
+            forwardPayload: emptySlice() 
+          }.toCell()
+        });
+    }
 
     // Randomly select NFT
     let rndIdx: Int = random(0, self.totalNftsHeld);
     if (rndIdx == self.totalNftsHeld) {
+      // Send back NFT that sender just sent
       send(SendParameters{
         to: ctx.sender,
-        value: ctx.value - ton("2"),
+        value: ctx.value - ton("2"), // Preserve 2 TON for admin profit
         bounce: false,
         mode: 0,
         body: Transfer { 
@@ -126,9 +124,10 @@ contract Task5 with Deployable {
         }.toCell()
       });
     } else {
+      // Send the selected NFT to the sender
       send(SendParameters{
         to: self.nfts.get(rndIdx)!!,
-        value: ctx.value - ton("2"),
+        value: ctx.value - ton("2"), // Preserve 2 TON for admin profit
         bounce: false,
         mode: 0,
         body: Transfer { 
@@ -140,6 +139,7 @@ contract Task5 with Deployable {
           forwardPayload: emptySlice() 
         }.toCell()
       });
+      // Replace selected NFT with the one that sender just sent
       self.nfts.set(rndIdx, ctx.sender);
     }
   }
