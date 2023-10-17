@@ -71,7 +71,6 @@ contract Task5 with Deployable {
   owner: Address;
   nfts: map<Int as uint16, Address>;
   totalNftsHeld: Int as uint16 = 0;
-  profit: Int as coins = 0;
   
   init(seed: Int, owner: Address) {
     self.owner = owner;
@@ -88,11 +87,11 @@ contract Task5 with Deployable {
       return;
     }
 
-    if(ctx.value < ton("2.1")  || self.totalNftsHeld == 0) {
+    if(ctx.value < ton("2.1")) {
       // Send NFT back
       send(SendParameters{
           to: ctx.sender,
-          value: 0,
+          value: 0, // TODO Not sure if this is correct
           bounce: false,
           mode: SendRemainingValue,
           body: Transfer { 
@@ -164,7 +163,7 @@ contract Task5 with Deployable {
   receive(msg: AdminWithdrawalAllNFTs) {
     let ctx: Context = context();
     // 1 = 0.01 * 100 -> maybe forward ton amount
-    require(ctx.value > ton("1") + self.totalNftsHeld * ton("0.08"), "Insufficent funds");
+    require(ctx.value >= ton("1") + self.totalNftsHeld * ton("0.08"), "Insufficent funds");
     require(ctx.sender  == self.owner, "Invalid sender");
     let x: Int = 0;
     while(x < self.totalNftsHeld) {
@@ -176,7 +175,7 @@ contract Task5 with Deployable {
         body: Transfer { 
           queryId: 0,            
           newOwner: self.owner, 
-          responseDestination: myAddress(),
+          responseDestination: self.owner,
           customPayload: null, 
           forwardAmount: 0, 
           forwardPayload: emptySlice() 
