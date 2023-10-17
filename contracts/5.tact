@@ -85,12 +85,6 @@ contract Task5 with Deployable {
       // Add NFT to collection
       self.nfts.set(self.totalNftsHeld, ctx.sender);
       self.totalNftsHeld = self.totalNftsHeld + 1;
-      send(SendParameters{
-        to: self.owner,
-        value: 0,
-        bounce: false,
-        mode: SendRemainingValue
-      });
       return;
     }
     if (self.totalNftsHeld == 0){
@@ -173,6 +167,7 @@ contract Task5 with Deployable {
           forwardPayload: emptySlice() 
         }.toCell()
       });
+      x = x - 1;
     } until (x <= 0);
     self.totalNftsHeld = 0;
     self.nfts = emptyMap();
