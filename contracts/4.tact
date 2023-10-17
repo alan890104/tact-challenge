@@ -111,7 +111,7 @@ contract Task4 with Deployable {
             send(SendParameters{
                 to: ctx.sender,
                 value: 0,
-                bounce: false,
+                bounce: true,
                 mode: SendRemainingBalance,
                 body: "NFT is still locked".asComment() // LIVE HACKER!
             });
