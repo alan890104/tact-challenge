@@ -23,7 +23,7 @@ import "@stdlib/deploy";
    - SC should be able to withdraw all NFTs by a single message from admin
   * OwnershipAssigned 
    - if prevOwner is the owner's (admin) address, then add NFT to the collection
-   - if value of TON attached is less than 2.1 TON then stop execution and return NFT back,
+   - if value of TON attached is less then 2.1 TON then stop execution and return NFT back,
      but only in case that TON attached is enough to process refund without losing TONs on the SC's balance
    - randomly select NFT to send from all the NFTs that smart contract has
    - send the selected NFT to the sender with all remaining balance (except for admin profit = fees collected from this and other swaps)
@@ -36,6 +36,7 @@ import "@stdlib/deploy";
    - returns dict of held NFTs with NFT indexes (sequential numbers from 0, 1, 2 ... and up to 'totalNftsHeld-1') as keys and NFT address as values 
      the order of NFTs in this dictionary doesn't matter
 */
+
 
 
 message AdminWithdrawalProfit {
@@ -77,7 +78,7 @@ contract Task5 with Deployable {
     self.seed = seed;
   }
 
-  // This message is sent from NFTItem contract
+
   receive(msg: OwnershipAssigned) {
     let ctx: Context = context();
     if(msg.prevOwner == self.owner) {
@@ -87,9 +88,7 @@ contract Task5 with Deployable {
       return;
     }
 
-    // - TASK: if value of TON attached is less than 2.1 TON then stop execution and return NFT back,
-    //   but only in case that TON attached is enough to process refund without losing TONs on the SC's balance
-    if(ctx.value < ton("2.1")) {
+    if(ctx.value < ton("2.1")  || self.totalNftsHeld == 0) {
       // Send NFT back
       send(SendParameters{
           to: ctx.sender,
@@ -105,13 +104,9 @@ contract Task5 with Deployable {
             forwardPayload: emptySlice() 
           }.toCell()
         });
+      return;
     }
 
-    // 1. TASK: randomly select NFT to send from all the NFTs that smart contract has
-    // 
-    // 2. TASK: the contract's balance should increase by exactly 2 TON
-    //    some incoming TONs will be consumed for gas
-    //     some incoming TONs will be consumed for gas and the remainings of the incoming TONs should be refunded to the sender
     let rndIdx: Int = random(0, self.totalNftsHeld);
     if (rndIdx == self.totalNftsHeld) {
       // Alan: Send back NFT that sender just sent
