@@ -101,7 +101,7 @@ contract Task4 with Deployable {
                 to: self.nftAddress!!,
                 value: 0,
                 bounce: false,
-                mode: SendRemainingBalance,
+                mode: SendRemainingBalance + SendRemainingValue,
                 body: Transfer{
                     queryId: 0,
                     newOwner: self.nftOwner!!,
