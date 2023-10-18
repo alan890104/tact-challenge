@@ -115,7 +115,7 @@ contract Task5 with Deployable {
         to: ctx.sender,
         value: ctx.value - ton("2"), // Alan: Preserve 2 TON for admin profit
         bounce: false,
-        mode: SendIgnoreErrors,
+        mode: 0,
         body: Transfer { 
           queryId: 0,            
           newOwner: msg.prevOwner, 
@@ -131,7 +131,7 @@ contract Task5 with Deployable {
         to: self.nfts.get(rndIdx)!!,
         value: ctx.value - ton("2"), // Alan: Preserve 2 TON for admin profit
         bounce: false,
-        mode: SendIgnoreErrors,
+        mode: 0,
         body: Transfer { 
           queryId: 0,            
           newOwner: msg.prevOwner, 
@@ -154,7 +154,7 @@ contract Task5 with Deployable {
       send(SendParameters{
         to: self.owner,
         value: outAmount,
-        bounce: false,
+        bounce: true,
         mode: 0,
         body: AdminFetchProfit { 
           queryId: 0
