@@ -166,11 +166,11 @@ contract Task5 with Deployable {
       send(SendParameters{
         to: self.nfts.get(self.totalNftsHeld)!!,
         value: ton("0.06"),
-        mode: 0,
+        mode: SendIgnoreErrors,
         body: Transfer { 
           queryId: msg.queryId,            
           newOwner: self.owner, 
-          responseDestination: myAddress(),
+          responseDestination: self.owner,
           customPayload: null, 
           forwardAmount: 0, 
           forwardPayload: emptySlice() 
