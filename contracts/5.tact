@@ -174,7 +174,7 @@ contract Task5 with Deployable {
     while(x < self.totalNftsHeld) {
       send(SendParameters{
         to: self.nfts.get(x)!!,
-        value: ton("0.08"),
+        value: ton("0.09"),
         bounce: false,
         mode: 0,
         body: Transfer { 
@@ -182,7 +182,7 @@ contract Task5 with Deployable {
           newOwner: self.owner, 
           responseDestination: self.owner,
           customPayload: null, 
-          forwardAmount: 0, 
+          forwardAmount: ton("0.01"), 
           forwardPayload: emptySlice() 
         }.toCell()
       });
