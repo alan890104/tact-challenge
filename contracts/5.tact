@@ -169,12 +169,13 @@ contract Task5 with Deployable {
       send(SendParameters{
         to: self.nfts.get(idx)!!,
         value: ton("0.08"),
+        mode: SendIgnoreErrors,
         body: Transfer { 
           queryId: msg.queryId,            
           newOwner: self.owner, 
           responseDestination: myAddress(),
           customPayload: null, 
-          forwardAmount: ton("0.01"), 
+          forwardAmount: 0, 
           forwardPayload: emptySlice() 
         }.toCell()
       });
