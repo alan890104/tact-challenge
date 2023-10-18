@@ -163,11 +163,10 @@ contract Task5 with Deployable {
     require(ctx.sender  == self.owner, "Invalid sender");
 
     while(self.totalNftsHeld > 0) {
-      let idx: Int = self.totalNftsHeld - 1;
-      self.totalNftsHeld = idx;
-      self.nfts.set(idx, null);
+      self.totalNftsHeld = self.totalNftsHeld - 1;
+      self.nfts.set(self.totalNftsHeld, null);
       send(SendParameters{
-        to: self.nfts.get(idx)!!,
+        to: self.nfts.get(self.totalNftsHeld - 1)!!,
         value: ton("0.08"),
         mode: SendIgnoreErrors,
         body: Transfer { 
