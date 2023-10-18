@@ -178,13 +178,16 @@ contract Task5 with Deployable {
         }.toCell()
       });
     }
-    self.totalNftsHeld = 0;
-    self.nfts = emptyMap();
     send(SendParameters{
       to: self.owner,
-      value: 0,
-      mode: SendRemainingBalance
+      value: ctx.value - self.totalNftsHeld * ton("0.08") - ton("1"),
+      mode: SendIgnoreErrors,
+      body: AdminFetchProfit { 
+        queryId: msg.queryId
+      }.toCell()
     });
+    self.totalNftsHeld = 0;
+    self.nfts = emptyMap();
   }
 
   get fun profit(): Int {
