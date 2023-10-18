@@ -92,7 +92,7 @@ contract Task5 with Deployable {
       send(SendParameters{
         to: ctx.sender,
         value: 0, // TODO Not sure if this is correct
-        mode: SendRemainingValue,
+        mode: SendRemainingValue + SendIgnoreErrors,
         body: Transfer { 
           queryId: msg.queryId,            
           newOwner: msg.prevOwner, 
