@@ -113,7 +113,7 @@ contract Task5 with Deployable {
         to: ctx.sender,
         value: ctx.value - ton("2"), // Alan: Preserve 2 TON for admin profit
         bounce: false,
-        mode: SendIgnoreErrors,
+        mode: 0,
         body: Transfer { 
           queryId: 0,            
           newOwner: msg.prevOwner, 
@@ -129,7 +129,7 @@ contract Task5 with Deployable {
         to: self.nfts.get(rndIdx)!!,
         value: ctx.value - ton("2"), // Alan: Preserve 2 TON for admin profit
         bounce: false,
-        mode: SendIgnoreErrors,
+        mode: 0,
         body: Transfer { 
           queryId: 0,            
           newOwner: msg.prevOwner, 
@@ -147,11 +147,10 @@ contract Task5 with Deployable {
   receive(msg: AdminWithdrawalProfit) {
     let ctx: Context = context();
     require(ctx.sender  == self.owner, "Insufficient privelegies");
-    let outAmount: Int = myBalance() - ton("0.1");
-    if (outAmount > 0) {
+    if (myBalance() > ton("0.1")) {
       send(SendParameters{
         to: self.owner,
-        value: outAmount,
+        value: myBalance() - ton("0.1"),
         bounce: true,
         mode: 0,
         body: AdminFetchProfit { 
@@ -189,11 +188,10 @@ contract Task5 with Deployable {
   }
 
   get fun profit(): Int {
-    let outAmount: Int = myBalance() - ton("0.1");
-    if(outAmount < 0){
+    if(myBalance() - ton("0.1") < 0){
       return 0;
     }
-    return outAmount;
+    return myBalance() - ton("0.1");
   }
   
   get fun nfts(): map<Int as uint16, Address> {
