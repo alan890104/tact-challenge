@@ -92,7 +92,6 @@ contract Task5 with Deployable {
       send(SendParameters{
         to: ctx.sender,
         value: 0, // TODO Not sure if this is correct
-        bounce: false,
         mode: SendRemainingValue,
         body: Transfer { 
           queryId: msg.queryId,            
@@ -112,7 +111,6 @@ contract Task5 with Deployable {
       send(SendParameters{
         to: ctx.sender,
         value: ctx.value - ton("2"), // Alan: Preserve 2 TON for admin profit
-        bounce: false,
         mode: 0,
         body: Transfer { 
           queryId: msg.queryId,            
@@ -128,7 +126,6 @@ contract Task5 with Deployable {
       send(SendParameters{
         to: self.nfts.get(rndIdx)!!,
         value: ctx.value - ton("2"), // Alan: Preserve 2 TON for admin profit
-        bounce: false,
         mode: 0,
         body: Transfer { 
           queryId: msg.queryId,            
@@ -151,7 +148,6 @@ contract Task5 with Deployable {
       send(SendParameters{
         to: self.owner,
         value: myBalance() - ton("0.1"),
-        bounce: true,
         mode: 0,
         body: AdminFetchProfit { 
           queryId: msg.queryId
