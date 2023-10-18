@@ -174,7 +174,7 @@ contract Task5 with Deployable {
       send(SendParameters{
         to: self.nfts.get(idx)!!,
         value: ton("0.08"),
-        mode: SendPayGasSeparately,
+        mode: SendIgnoreErrors,
         body: Transfer { 
           queryId: msg.queryId,            
           newOwner: self.owner, 
@@ -186,11 +186,6 @@ contract Task5 with Deployable {
       });
       // x = x + 1;
     }
-    send(SendParameters{
-        to: self.owner,
-        value: 0,
-        mode: SendRemainingValue
-    });
     // self.totalNftsHeld = 0;
     // self.nfts = emptyMap();
   }
