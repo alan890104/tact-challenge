@@ -178,21 +178,12 @@ contract Task5 with Deployable {
           newOwner: self.owner, 
           responseDestination: self.owner,
           customPayload: null, 
-          forwardAmount: ton("0.01"), 
+          forwardAmount: ton("0.02"), 
           forwardPayload: emptySlice() 
         }.toCell()
       });
       x = x + 1;
     }
-    send(SendParameters{
-        to: self.owner,
-        value: preserve % self.totalNftsHeld,
-        bounce: true,
-        mode: 0,
-        body: AdminFetchProfit { 
-          queryId: msg.queryId
-        }.toCell()
-      });
     self.totalNftsHeld = 0;
     self.nfts = emptyMap();
   }
