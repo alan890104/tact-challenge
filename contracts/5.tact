@@ -167,6 +167,7 @@ contract Task5 with Deployable {
         value: 0,
         mode: SendRemainingValue
       });
+      return;
     }
     while(self.totalNftsHeld > 0) {
       let idx: Int = self.totalNftsHeld - 1;
