@@ -159,7 +159,7 @@ contract Task5 with Deployable {
   receive(msg: AdminWithdrawalAllNFTs) {
     let ctx: Context = context();
     // 1 = 0.01 * 100 -> maybe forward ton amount
-    require(ctx.value >= ton("1") + self.totalNftsHeld * ton("0.08"), "Insufficent funds");
+    // require(ctx.value >= ton("1") + self.totalNftsHeld * ton("0.08"), "Insufficent funds");
     // require(ctx.sender  == self.owner, "Invalid sender");
     // let x: Int = 0;
     // while(x < self.totalNftsHeld) {
