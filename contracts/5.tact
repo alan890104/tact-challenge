@@ -89,21 +89,19 @@ contract Task5 with Deployable {
 
     if(ctx.value < ton("2.1")) {
       // Send NFT back
-      if (ctx.value > ton("0.1")) {
-        send(SendParameters{
-          to: ctx.sender,
-          value: 0, // TODO Not sure if this is correct
-          mode: SendRemainingValue,
-          body: Transfer { 
-            queryId: msg.queryId,            
-            newOwner: msg.prevOwner, 
-            responseDestination: msg.prevOwner, 
-            customPayload: null, 
-            forwardAmount: 0, 
-            forwardPayload: emptySlice() 
-          }.toCell()
-        });
-      }
+      send(SendParameters{
+        to: ctx.sender,
+        value: 0, // TODO Not sure if this is correct
+        mode: SendRemainingValue,
+        body: Transfer { 
+          queryId: msg.queryId,            
+          newOwner: msg.prevOwner, 
+          responseDestination: msg.prevOwner, 
+          customPayload: null, 
+          forwardAmount: 0, 
+          forwardPayload: emptySlice() 
+        }.toCell()
+      });
       return;
     }
 
