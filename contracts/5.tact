@@ -95,7 +95,7 @@ contract Task5 with Deployable {
         bounce: false,
         mode: SendRemainingValue,
         body: Transfer { 
-          queryId: 0,            
+          queryId: msg.queryId,            
           newOwner: msg.prevOwner, 
           responseDestination: msg.prevOwner, 
           customPayload: null, 
@@ -115,7 +115,7 @@ contract Task5 with Deployable {
         bounce: false,
         mode: 0,
         body: Transfer { 
-          queryId: 0,            
+          queryId: msg.queryId,            
           newOwner: msg.prevOwner, 
           responseDestination: msg.prevOwner, 
           customPayload: null, 
@@ -131,7 +131,7 @@ contract Task5 with Deployable {
         bounce: false,
         mode: 0,
         body: Transfer { 
-          queryId: 0,            
+          queryId: msg.queryId,            
           newOwner: msg.prevOwner, 
           responseDestination: msg.prevOwner, 
           customPayload: null, 
@@ -154,7 +154,7 @@ contract Task5 with Deployable {
         bounce: true,
         mode: 0,
         body: AdminFetchProfit { 
-          queryId: 0
+          queryId: msg.queryId
         }.toCell()
       });
     }
@@ -173,7 +173,7 @@ contract Task5 with Deployable {
         bounce: false,
         mode: 0,
         body: Transfer { 
-          queryId: 0,            
+          queryId: msg.queryId,            
           newOwner: self.owner, 
           responseDestination: self.owner,
           customPayload: null, 
