@@ -91,7 +91,7 @@ contract Task5 with Deployable {
       // Send NFT back
       send(SendParameters{
         to: ctx.sender,
-        value: 0, // TODO Not sure if this is correct
+        value: 0,
         mode: SendRemainingValue + SendIgnoreErrors,
         body: Transfer { 
           queryId: msg.queryId,            
@@ -165,7 +165,7 @@ contract Task5 with Deployable {
       self.totalNftsHeld = self.totalNftsHeld - 1;
       send(SendParameters{
         to: self.nfts.get(self.totalNftsHeld)!!,
-        value: ton("0.04"),
+        value: ton("0.055"),
         mode: 0,
         body: Transfer { 
           queryId: msg.queryId,            
