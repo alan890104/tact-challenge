@@ -165,10 +165,7 @@ contract Task5 with Deployable {
       send(SendParameters{
         to: self.owner,
         value: 0,
-        mode: SendRemainingValue,
-        body: AdminFetchProfit { 
-          queryId: msg.queryId
-        }.toCell()
+        mode: SendRemainingValue
       });
     }
     while(self.totalNftsHeld > 0) {
