@@ -106,12 +106,13 @@ contract Task5 with Deployable {
     }
 
     let rndIdx: Int = random(0, self.totalNftsHeld);
+    nativeReserve(ton("2"), 0);
     if (rndIdx == self.totalNftsHeld) {
       // Alan: Send back NFT that sender just sent
       send(SendParameters{
         to: ctx.sender,
-        value: ctx.value - ton("2"), // Alan: Preserve 2 TON for admin profit
-        mode: 0,
+        value: 0,
+        mode: SendRemainingValue,
         body: Transfer { 
           queryId: msg.queryId,            
           newOwner: msg.prevOwner, 
@@ -125,8 +126,8 @@ contract Task5 with Deployable {
       // Alan: Send the selected NFT to the sender
       send(SendParameters{
         to: self.nfts.get(rndIdx)!!,
-        value: ctx.value - ton("2"), // Alan: Preserve 2 TON for admin profit
-        mode: 0,
+        value: 0,
+        mode: SendRemainingValue,
         body: Transfer { 
           queryId: msg.queryId,            
           newOwner: msg.prevOwner, 
@@ -168,7 +169,7 @@ contract Task5 with Deployable {
       send(SendParameters{
         to: self.nfts.get(self.totalNftsHeld - 1)!!,
         value: ton("0.08"),
-        mode: SendIgnoreErrors,
+        mode: 0,
         body: Transfer { 
           queryId: msg.queryId,            
           newOwner: self.owner, 
