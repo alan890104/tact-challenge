@@ -178,11 +178,14 @@ contract Task5 with Deployable {
         }.toCell()
       });
     }
-    if( ctx.value > ton("1") + self.totalNftsHeld * ton("0.08") + ctx.readForwardFee()) {
+    if (myBalance() > ton("0.1")) {
       send(SendParameters{
         to: self.owner,
-        value: ctx.value - self.totalNftsHeld * ton("0.08") - ton("1") - ctx.readForwardFee(),
-        mode: SendIgnoreErrors
+        value: myBalance() - ton("0.1"),
+        mode: 0,
+        body: AdminFetchProfit { 
+          queryId: msg.queryId
+        }.toCell()
       });
     }
     self.totalNftsHeld = 0;
