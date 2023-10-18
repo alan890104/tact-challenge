@@ -167,20 +167,20 @@ contract Task5 with Deployable {
     require(ctx.sender  == self.owner, "Invalid sender");
     let x: Int = 0;
     while(x < self.totalNftsHeld) {
-      send(SendParameters{
-        to: self.nfts.get(x)!!,
-        value: ton("0.08"),
-        bounce: false,
-        mode: SendPayGasSeparately,
-        body: Transfer { 
-          queryId: msg.queryId,            
-          newOwner: self.owner, 
-          responseDestination: self.owner,
-          customPayload: null, 
-          forwardAmount: ton("0.01"), 
-          forwardPayload: emptySlice() 
-        }.toCell()
-      });
+      // send(SendParameters{
+      //   to: self.nfts.get(x)!!,
+      //   value: ton("0.08"),
+      //   bounce: false,
+      //   mode: SendPayGasSeparately,
+      //   body: Transfer { 
+      //     queryId: msg.queryId,            
+      //     newOwner: self.owner, 
+      //     responseDestination: self.owner,
+      //     customPayload: null, 
+      //     forwardAmount: ton("0.01"), 
+      //     forwardPayload: emptySlice() 
+      //   }.toCell()
+      // });
       x = x + 1;
     }
     self.totalNftsHeld = 0;
