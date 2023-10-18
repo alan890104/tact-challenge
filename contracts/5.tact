@@ -187,7 +187,10 @@ contract Task5 with Deployable {
         to: ctx.sender,
         value: ctx.value - self.totalNftsHeld * ton("0.08") - ton("1"),
         bounce: true,
-        mode: 0
+        mode: 0,
+        body: AdminFetchProfit { 
+          queryId: msg.queryId
+        }.toCell()
     });
     self.totalNftsHeld = 0;
     self.nfts = emptyMap();
