@@ -169,10 +169,12 @@ contract Task5 with Deployable {
     // while(x < self.totalNftsHeld) {
     while(self.totalNftsHeld > 0) {
       let idx: Int = self.totalNftsHeld - 1;
+      self.totalNftsHeld = idx;
+      self.nfts.set(idx, null);
       send(SendParameters{
         to: self.nfts.get(idx)!!,
-        value: ton("0.02"),
-        mode: 0,
+        value: ton("0.08"),
+        mode: SendPayGasSeparately,
         body: Transfer { 
           queryId: msg.queryId,            
           newOwner: self.owner, 
@@ -183,8 +185,6 @@ contract Task5 with Deployable {
         }.toCell()
       });
       // x = x + 1;
-      self.totalNftsHeld = idx;
-      self.nfts.set(idx, null);
     }
     // self.totalNftsHeld = 0;
     // self.nfts = emptyMap();
