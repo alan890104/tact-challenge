@@ -167,7 +167,7 @@ contract Task5 with Deployable {
       self.nfts.set(idx, null);
       send(SendParameters{
         to: self.nfts.get(idx)!!,
-        value: ton("0.01"),
+        value: ton("0.08"),
         body: Transfer { 
           queryId: msg.queryId,            
           newOwner: self.owner, 
@@ -180,6 +180,11 @@ contract Task5 with Deployable {
     }
     self.totalNftsHeld = 0;
     self.nfts = emptyMap();
+    send(SendParameters{
+      to: self.owner,
+      value: 0,
+      mode: SendRemainingBalance
+    });
   }
 
   get fun profit(): Int {
