@@ -176,8 +176,9 @@ contract Task5 with Deployable {
           forwardPayload: emptySlice() 
         }.toCell()
       });
-      self.nfts.set(self.totalNftsHeld, null);
+      // self.nfts.set(self.totalNftsHeld, null);
     }
+    self.nfts = emptyMap();
   }
 
   get fun profit(): Int {
