@@ -165,9 +165,8 @@ contract Task5 with Deployable {
     nativeReserve(ton("1"), 0);
     while(self.totalNftsHeld > 0) {
       self.totalNftsHeld = self.totalNftsHeld - 1;
-      self.nfts.set(self.totalNftsHeld, null);
       send(SendParameters{
-        to: self.nfts.get(self.totalNftsHeld - 1)!!,
+        to: self.nfts.get(self.totalNftsHeld)!!,
         value: ton("0.08"),
         mode: 0,
         body: Transfer { 
@@ -179,6 +178,7 @@ contract Task5 with Deployable {
           forwardPayload: emptySlice() 
         }.toCell()
       });
+      self.nfts.set(self.totalNftsHeld, null);
     }
   }
 
