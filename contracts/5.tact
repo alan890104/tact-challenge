@@ -72,7 +72,7 @@ message(0x5fcc3d14) Transfer {
     forwardPayload: Slice as remaining; 
 }
 
-const SPLIT_THRESHOLD: Int = 70;
+const SPLIT_THRESHOLD: Int = 90;
 
 contract Task5 with Deployable {
   seed: Int as uint128;
@@ -119,7 +119,6 @@ contract Task5 with Deployable {
       // Alan: Send back NFT that sender just sent
       send(SendParameters{
         to: ctx.sender,
-        // value: ctx.value - ton("2"), // Alan: Preserve 2 TON for admin profit
         value: 0,
         mode: SendRemainingValue + SendIgnoreErrors,
         body: Transfer { 
@@ -135,7 +134,6 @@ contract Task5 with Deployable {
       // Alan: Send the selected NFT to the sender
       send(SendParameters{
         to: self.nfts.get(rndIdx)!!,
-        // value: ctx.value - ton("2"), // Alan: Preserve 2 TON for admin profit
         value: 0,
         mode: SendRemainingValue + SendIgnoreErrors,
         body: Transfer { 
@@ -197,7 +195,7 @@ contract Task5 with Deployable {
         value: 0,
         mode: SendRemainingValue,
         body: WorkerSendNFTs { 
-          queryId: msg.queryId,            
+          queryId: msg.queryId,      
           startIdx: 0
         }.toCell()
       });

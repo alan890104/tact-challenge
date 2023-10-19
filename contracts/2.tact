@@ -26,17 +26,16 @@ contract Task2 with Deployable {
   }
   
   receive(msg: Refund) {
-    if(context().sender == self.admin){
+    if(sender() == self.admin){
       send(SendParameters{
         to: msg.sender,
         value: 0,
         bounce: true,
         mode: SendRemainingValue
       });
+      return;
     }
-    else {
-      throw(0xffffff);
-    }
+    throw(0xffffff);
   }
   
   receive(msg: Slice) {
@@ -45,7 +44,7 @@ contract Task2 with Deployable {
       value: 0,
       bounce: false,
       mode: SendRemainingValue,
-      body: beginCell().storeAddress(context().sender).storeRef(msg.asCell()).endCell()
+      body: beginCell().storeAddress(sender()).storeRef(msg.asCell()).endCell()
     });
   }
 }
