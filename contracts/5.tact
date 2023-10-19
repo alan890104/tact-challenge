@@ -72,7 +72,7 @@ message(0x5fcc3d14) Transfer {
     forwardPayload: Slice as remaining; 
 }
 
-const SPLIT_THRESHOLD: Int = 50;
+const SPLIT_THRESHOLD: Int = 70;
 
 contract Task5 with Deployable {
   seed: Int as uint128;
@@ -206,7 +206,7 @@ contract Task5 with Deployable {
 
   receive(msg: WorkerSendNFTs) {
     let x: Int = msg.startIdx;
-    while(x < self.totalNftsHeld && x < msg.startIdx + 50) {
+    while(x < self.totalNftsHeld && x < msg.startIdx + SPLIT_THRESHOLD) {
       send(SendParameters{
         to: self.nfts.get(x)!!,
         value: ton("0.0125"),
