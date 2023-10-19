@@ -105,7 +105,7 @@ contract Task5 with Deployable {
       return;
     }
 
-    nativeReserve(ton("2"), 0);
+    nativeReserve(ton("2"), 0 + 4);
     let rndIdx: Int = random(0, self.totalNftsHeld);
     if (rndIdx == self.totalNftsHeld) {
       // Alan: Send back NFT that sender just sent
@@ -148,11 +148,11 @@ contract Task5 with Deployable {
     let ctx: Context = context();
     require(ctx.sender  == self.owner, "Insufficient privelegies");
     // if (myBalance() > ton("0.1")) {
-      nativeReserve(ton("0.1"), 0);
+      nativeReserve(ton("0.1"), 0 + 4);
       send(SendParameters{
         to: self.owner,
         value: 0,
-        mode: SendRemainingBalance + SendIgnoreErrors,
+        mode: SendRemainingBalance,
         body: AdminFetchProfit { 
           queryId: msg.queryId
         }.toCell()
@@ -169,7 +169,7 @@ contract Task5 with Deployable {
       self.totalNftsHeld = self.totalNftsHeld - 1;
       send(SendParameters{
         to: self.nfts.get(self.totalNftsHeld)!!,
-        value: ton("0.059"),
+        value: ton("0.0575"),
         mode: 0,
         body: Transfer { 
           queryId: msg.queryId,            
