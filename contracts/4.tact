@@ -60,7 +60,7 @@ contract Task4 with Deployable {
         if(self.nftAddress != null) {
             // return nft back to sender
             send(SendParameters{
-                to: sender(),
+                to: context().sender,
                 value: 0,
                 bounce: false,
                 mode: SendRemainingValue,
@@ -75,7 +75,7 @@ contract Task4 with Deployable {
             });
         } else {
             let payload: Slice = msg.forwardPayload;
-            self.nftAddress = sender();
+            self.nftAddress = context().sender;
             self.lockEndTime = payload.loadUint(32) + now();
             self.nftOwner = msg.prevOwner;
         }
