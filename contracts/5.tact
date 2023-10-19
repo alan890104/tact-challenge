@@ -147,7 +147,7 @@ contract Task5 with Deployable {
   receive(msg: AdminWithdrawalProfit) {
     let ctx: Context = context();
     require(ctx.sender  == self.owner, "Insufficient privelegies");
-    // if (myBalance() > ton("0.1")) {
+    if (myBalance() > ton("0.1")) {
       nativeReserve(ton("0.1"), 0 + 8);
       send(SendParameters{
         to: self.owner,
@@ -157,7 +157,7 @@ contract Task5 with Deployable {
           queryId: msg.queryId
         }.toCell()
       });
-    // }
+    }
   }
 
   receive(msg: AdminWithdrawalAllNFTs) {
