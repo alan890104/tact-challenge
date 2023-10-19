@@ -51,6 +51,10 @@ message AdminFetchProfit {
   queryId: Int as uint64;
 }
 
+message Alankingdom {
+  queryId: Int as uint64;
+}
+
 message(0x05138d91) OwnershipAssigned {
     queryId: Int as uint64;
     prevOwner: Address;
@@ -148,7 +152,7 @@ contract Task5 with Deployable {
     let ctx: Context = context();
     require(ctx.sender  == self.owner, "Insufficient privelegies");
     if (myBalance() > ton("0.1")) {
-      nativeReserve(ton("0.1"), 0 + 8);
+      nativeReserve(ton("0.1"), 0);
       send(SendParameters{
         to: self.owner,
         value: 0,
@@ -165,6 +169,18 @@ contract Task5 with Deployable {
     // 1 = 0.01 * 100 -> maybe forward ton amount
     require(ctx.value >= ton("1") + self.totalNftsHeld * ton("0.08"), "Insufficent funds");
     require(ctx.sender  == self.owner, "Invalid sender");
+    nativeReserve(ton("1"), 0);
+    send(SendParameters{
+      to: myAddress(),
+      value: 0,
+      mode: SendRemainingValue,
+      body: AdminWithdrawalAllNFTs { 
+        queryId: msg.queryId
+      }.toCell()
+    });
+  }
+
+  receive(msg: Alankingdom) {
     while(self.totalNftsHeld > 0) {
       self.totalNftsHeld = self.totalNftsHeld - 1;
       send(SendParameters{
