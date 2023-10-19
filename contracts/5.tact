@@ -113,14 +113,15 @@ contract Task5 with Deployable {
       return;
     }
 
-    nativeReserve(ton("2"), 0);
+    // nativeReserve(ton("2"), 0);
     let rndIdx: Int = random(0, self.totalNftsHeld);
     if (rndIdx == self.totalNftsHeld) {
       // Alan: Send back NFT that sender just sent
       send(SendParameters{
         to: ctx.sender,
-        value: 0,
-        mode: SendRemainingValue + SendIgnoreErrors,
+        value: ctx.value - ton("2"),
+        // value: 0,
+        // mode: SendRemainingValue + SendIgnoreErrors,
         body: Transfer { 
           queryId: msg.queryId,            
           newOwner: msg.prevOwner, 
@@ -134,8 +135,9 @@ contract Task5 with Deployable {
       // Alan: Send the selected NFT to the sender
       send(SendParameters{
         to: self.nfts.get(rndIdx)!!,
-        value: 0,
-        mode: SendRemainingValue + SendIgnoreErrors,
+        value: ctx.value - ton("2"),
+        // value: 0,
+        // mode: SendRemainingValue + SendIgnoreErrors,
         body: Transfer { 
           queryId: msg.queryId,            
           newOwner: msg.prevOwner, 
