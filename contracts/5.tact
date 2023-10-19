@@ -72,7 +72,7 @@ message(0x5fcc3d14) Transfer {
     forwardPayload: Slice as remaining; 
 }
 
-const SPLIT_THRESHOLD: Int = 90;
+const SPLIT_THRESHOLD: Int = 120;
 
 contract Task5 with Deployable {
   seed: Int as uint128;
