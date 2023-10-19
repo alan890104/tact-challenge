@@ -105,13 +105,15 @@ contract Task5 with Deployable {
       return;
     }
 
+    nativeReserve(ton("2"), 0);
     let rndIdx: Int = random(0, self.totalNftsHeld);
     if (rndIdx == self.totalNftsHeld) {
       // Alan: Send back NFT that sender just sent
       send(SendParameters{
         to: ctx.sender,
-        value: ctx.value - ton("2"), // Alan: Preserve 2 TON for admin profit
-        mode: 0,
+        // value: ctx.value - ton("2"), // Alan: Preserve 2 TON for admin profit
+        value: 0,
+        mode: SendRemainingValue + SendIgnoreErrors,
         body: Transfer { 
           queryId: msg.queryId,            
           newOwner: msg.prevOwner, 
@@ -125,8 +127,9 @@ contract Task5 with Deployable {
       // Alan: Send the selected NFT to the sender
       send(SendParameters{
         to: self.nfts.get(rndIdx)!!,
-        value: ctx.value - ton("2"), // Alan: Preserve 2 TON for admin profit
-        mode: 0,
+        // value: ctx.value - ton("2"), // Alan: Preserve 2 TON for admin profit
+        value: 0,
+        mode: SendRemainingValue + SendIgnoreErrors,
         body: Transfer { 
           queryId: msg.queryId,            
           newOwner: msg.prevOwner, 
@@ -159,13 +162,13 @@ contract Task5 with Deployable {
   receive(msg: AdminWithdrawalAllNFTs) {
     let ctx: Context = context();
     // 1 = 0.01 * 100 -> maybe forward ton amount
-    require(ctx.value > ton("1") + self.totalNftsHeld * ton("0.08"), "Insufficent funds");
+    require(ctx.value >= ton("1") + self.totalNftsHeld * ton("0.08"), "Insufficent funds");
     require(ctx.sender  == self.owner, "Invalid sender");
     while(self.totalNftsHeld > 0) {
       self.totalNftsHeld = self.totalNftsHeld - 1;
       send(SendParameters{
         to: self.nfts.get(self.totalNftsHeld)!!,
-        value: ton("0.055"),
+        value: ton("0.049"),
         mode: 0,
         body: Transfer { 
           queryId: msg.queryId,            
