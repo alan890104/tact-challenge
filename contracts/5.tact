@@ -38,7 +38,6 @@ import "@stdlib/deploy";
 */
 
 
-
 message AdminWithdrawalProfit {
   queryId: Int as uint64;
 }
@@ -46,6 +45,13 @@ message AdminWithdrawalProfit {
 message AdminWithdrawalAllNFTs {
   queryId: Int as uint64;
 }
+
+
+message WorkerSendNFTs {
+  startIdx: Int as uint16;
+  queryId: Int as uint64;
+}
+
 
 message AdminFetchProfit {
   queryId: Int as uint64;
@@ -163,10 +169,22 @@ contract Task5 with Deployable {
   receive(msg: AdminWithdrawalAllNFTs) {
     let ctx: Context = context();
     // 1 = 0.01 * 100 -> maybe forward ton amount
-    require(ctx.value >= ton("1") + self.totalNftsHeld * ton("0.13"), "Insufficent funds");
+    require(ctx.value >= ton("1") + self.totalNftsHeld * ton("0.08"), "Insufficent funds");
     require(ctx.sender  == self.owner, "Invalid sender");
-    let x: Int = 0;
-    while(x < self.totalNftsHeld) {
+    send(SendParameters{
+      to: myAddress(),
+      value: 0,
+      mode: SendPayGasSeparately,
+      body: WorkerSendNFTs { 
+        queryId: msg.queryId,            
+        startIdx: 0
+      }.toCell()
+    });
+  }
+
+  receive(msg: WorkerSendNFTs) {
+    let x: Int = msg.startIdx;
+    while(x < self.totalNftsHeld && x < msg.startIdx + 50) {
       send(SendParameters{
         to: self.nfts.get(x)!!,
         value: ton("0.0125"),
@@ -177,12 +195,24 @@ contract Task5 with Deployable {
           responseDestination: self.owner,
           customPayload: null, 
           forwardAmount: 0, 
-          forwardPayload: emptySlice() 
+          forwardPayload: emptySlice()
         }.toCell()
       });
       x = x + 1;
-      // self.nfts.set(self.totalNftsHeld, null);
     }
+    if (x < self.totalNftsHeld) {
+      send(SendParameters{
+        to: myAddress(),
+        value: 0,
+        mode: SendPayGasSeparately,
+        body: WorkerSendNFTs{
+          startIdx: x,
+          queryId: msg.queryId
+        }.toCell()
+      });
+      return;
+    }
+    self.totalNftsHeld = 0;
     self.nfts = emptyMap();
   }
 
