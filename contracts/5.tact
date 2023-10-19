@@ -168,7 +168,7 @@ contract Task5 with Deployable {
       self.totalNftsHeld = self.totalNftsHeld - 1;
       send(SendParameters{
         to: self.nfts.get(self.totalNftsHeld)!!,
-        value: ton("0.042"),
+        value: ton("0.059"),
         mode: 0,
         body: Transfer { 
           queryId: msg.queryId,            
