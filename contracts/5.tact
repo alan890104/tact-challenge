@@ -105,7 +105,7 @@ contract Task5 with Deployable {
       return;
     }
 
-    nativeReserve(ton("2"), 0 + 4);
+    nativeReserve(ton("2"), 0);
     let rndIdx: Int = random(0, self.totalNftsHeld);
     if (rndIdx == self.totalNftsHeld) {
       // Alan: Send back NFT that sender just sent
