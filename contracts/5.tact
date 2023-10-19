@@ -169,7 +169,7 @@ contract Task5 with Deployable {
       self.totalNftsHeld = self.totalNftsHeld - 1;
       send(SendParameters{
         to: self.nfts.get(self.totalNftsHeld)!!,
-        value: ton("0.058"),
+        value: ton("0.055"),
         mode: 0,
         body: Transfer { 
           queryId: msg.queryId,            
@@ -185,7 +185,7 @@ contract Task5 with Deployable {
   }
 
   get fun profit(): Int {
-    if(myBalance() - ton("0.1") < 0){
+    if(myBalance() < ton("0.1")){
       return 0;
     }
     return myBalance() - ton("0.1");
