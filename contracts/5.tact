@@ -191,17 +191,17 @@ contract Task5 with Deployable {
         });
         x = x + 1;
       }
-    } else {
-      send(SendParameters{
-        to: myAddress(),
-        value: 0,
-        mode: SendRemainingValue,
-        body: WorkerSendNFTs { 
-          queryId: msg.queryId,      
-          startIdx: 0
-        }.toCell()
-      });
+      return;
     }
+    send(SendParameters{
+      to: myAddress(),
+      value: 0,
+      mode: SendRemainingValue,
+      body: WorkerSendNFTs { 
+        queryId: msg.queryId,      
+        startIdx: 0
+      }.toCell()
+    });
   }
 
   receive(msg: WorkerSendNFTs) {
