@@ -26,16 +26,17 @@ contract Task2 with Deployable {
   }
   
   receive(msg: Refund) {
-    if(sender() == self.admin){
+    require(sender() == self.admin, "Only admin can refund");
+    // if(sender() == self.admin){
       send(SendParameters{
         to: msg.sender,
         value: 0,
-        bounce: false,
+        bounce: true,
         mode: SendRemainingValue
       });
       return;
-    }
-    throw(0xffffff);
+    // }
+    // throw(0xffffff);
   }
   
   receive(msg: Slice) {
