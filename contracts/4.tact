@@ -92,15 +92,16 @@ contract Task4 with Deployable {
                 body: comment
             });
             return;
-        } 
+        }
+        let owner: Address = self.nftOwner!!;
         send(SendParameters{
             to: self.nftAddress!!,
             value: 0,
             mode: SendRemainingValue,
             body: Transfer { 
             queryId: msg.queryId,
-            newOwner: self.nftOwner!!, 
-            responseDestination: self.nftOwner!!,
+            newOwner: owner, 
+            responseDestination: owner,
             customPayload: null, 
             forwardAmount: 0, 
             forwardPayload: emptySlice()
