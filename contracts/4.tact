@@ -51,7 +51,7 @@ contract Task4 with Deployable {
     lockEndTime: Int as uint32 = 0;
     nftAddress: Address? = null;
     nftOwner: Address? = null;
-    stillLockedComment: String = "NFT is still locked";
+    // stillLockedComment: String = "NFT is still locked";
 
     init(seed: Int) {
         self.seed = seed;
@@ -85,11 +85,12 @@ receive(msg: NftWithdrawal) {
     let sender: Address = sender();
     require(sender == self.nftOwner, "Invalid sender");
     if (now() < self.lockEndTime) {
+        let comment: Cell = "NFT is still locked".asComment();
         send(SendParameters{
             to: sender,
             value: 0,
             mode: SendRemainingValue,
-            body: self.stillLockedComment.asComment()
+            body: comment
         });
         return;
     } 
