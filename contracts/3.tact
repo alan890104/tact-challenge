@@ -93,7 +93,8 @@ contract Task3 with Deployable {
             forwardPayload: emptySlice()
           }.toCell()
         });
-      } else {
+        return;
+      }
         self.aAmount = self.aAmount + msg.amount;
         self.bAmount = self.bAmount - amountOfBJettonToSend;
         send(SendParameters{
@@ -110,7 +111,6 @@ contract Task3 with Deployable {
             forwardPayload: emptySlice()
           }.toCell()
         });
-      }
     } else if (sender == self.jettonAddressB) {
       if (msg.from == self.owner) {
         self.bAmount = self.bAmount + msg.amount;
@@ -133,7 +133,8 @@ contract Task3 with Deployable {
             forwardPayload: emptySlice()
           }.toCell()
         });
-      } else {
+        return;
+      }
         self.bAmount = self.bAmount + msg.amount;
         self.aAmount = self.aAmount - amountOfAJettonToSend;
         send(SendParameters{
@@ -150,7 +151,6 @@ contract Task3 with Deployable {
             forwardPayload: emptySlice()
           }.toCell()
         });
-      }
     } else {
       // received a different jetton (neither A nor B), throw an error
       throw(0xffffff);

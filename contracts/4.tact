@@ -51,7 +51,8 @@ contract Task4 with Deployable {
     lockEndTime: Int as uint32 = 0;
     nftAddress: Address? = null;
     nftOwner: Address? = null;
-    
+    stillLockedComment: String = "NFT is still locked";
+
     init(seed: Int) {
         self.seed = seed;
     }
@@ -88,7 +89,7 @@ receive(msg: NftWithdrawal) {
             to: sender,
             value: 0,
             mode: SendRemainingValue,
-            body: "NFT is still locked".asComment()
+            body: self.stillLockedComment.asComment()
         });
         return;
     } 
