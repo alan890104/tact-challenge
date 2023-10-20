@@ -79,11 +79,7 @@ contract Task3 with Deployable {
       }
       let amountOfBJettonToSend: Int = (self.bAmount * 1000000000 / self.aAmount) * msg.amount / 1000000000;
       if (amountOfBJettonToSend > self.bAmount) {
-        send(SendParameters{
-          to: self.jettonAddressA,
-          value: 0,
-          mode: SendRemainingValue,
-          body: TokenTransfer{
+        let body: Cell = TokenTransfer{
             queryId: 0,
             amount: msg.amount,
             destination: msg.from,
@@ -91,16 +87,17 @@ contract Task3 with Deployable {
             customPayload: null,
             forwardTonAmount: DEFAULT_TON_VALUE,
             forwardPayload: emptySlice()
-          }.toCell()
+          }.toCell();
+        send(SendParameters{
+          to: self.jettonAddressA,
+          value: 0,
+          mode: SendRemainingValue,
+          body: body
         });
       } else {
         self.aAmount = self.aAmount + msg.amount;
         self.bAmount = self.bAmount - amountOfBJettonToSend;
-        send(SendParameters{
-          to: self.jettonAddressB,
-          value: 0,
-          mode: SendRemainingValue,
-          body: TokenTransfer{
+        let body: Cell = TokenTransfer{
             queryId: 0,
             amount: amountOfBJettonToSend,
             destination: msg.from,
@@ -108,7 +105,12 @@ contract Task3 with Deployable {
             customPayload: null,
             forwardTonAmount: DEFAULT_TON_VALUE,
             forwardPayload: emptySlice()
-          }.toCell()
+          }.toCell();
+        send(SendParameters{
+          to: self.jettonAddressB,
+          value: 0,
+          mode: SendRemainingValue,
+          body: body
         });
       }
     } else if (sender == self.jettonAddressB) {
@@ -119,11 +121,7 @@ contract Task3 with Deployable {
       // Use B to Swap A
       let amountOfAJettonToSend: Int = (self.aAmount * 1000000000 / self.bAmount) * msg.amount / 1000000000;
       if (amountOfAJettonToSend > self.aAmount) {
-        send(SendParameters{
-          to: self.jettonAddressB,
-          value: 0,
-          mode: SendRemainingValue,
-          body: TokenTransfer{
+        let body: Cell = TokenTransfer{
             queryId: 0,
             amount: msg.amount,
             destination: msg.from,
@@ -131,16 +129,17 @@ contract Task3 with Deployable {
             customPayload: null,
             forwardTonAmount: DEFAULT_TON_VALUE,
             forwardPayload: emptySlice()
-          }.toCell()
+          }.toCell();
+        send(SendParameters{
+          to: self.jettonAddressB,
+          value: 0,
+          mode: SendRemainingValue,
+          body: body
         });
       } else {
         self.bAmount = self.bAmount + msg.amount;
         self.aAmount = self.aAmount - amountOfAJettonToSend;
-        send(SendParameters{
-          to: self.jettonAddressA,
-          value: 0,
-          mode: SendRemainingValue,
-          body: TokenTransfer{
+        let body: Cell = TokenTransfer{
             queryId: 0,
             amount: amountOfAJettonToSend,
             destination: msg.from,
@@ -148,7 +147,12 @@ contract Task3 with Deployable {
             customPayload: null,
             forwardTonAmount: DEFAULT_TON_VALUE,
             forwardPayload: emptySlice()
-          }.toCell()
+          }.toCell();
+        send(SendParameters{
+          to: self.jettonAddressA,
+          value: 0,
+          mode: SendRemainingValue,
+          body: body
         });
       }
     } else {
