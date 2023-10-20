@@ -75,14 +75,14 @@ message(0x5fcc3d14) Transfer {
 const SPLIT_THRESHOLD: Int = 200;
 
 contract Task5 with Deployable {
-  seed: Int as uint128;
+  // seed: Int as uint128;
   owner: Address;
   nfts: map<Int as uint16, Address>;
   totalNftsHeld: Int as uint16 = 0;
   
   init(seed: Int, owner: Address) {
     self.owner = owner;
-    self.seed = seed;
+    // self.seed = seed;
   }
 
 
