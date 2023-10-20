@@ -75,9 +75,8 @@ contract Task4 with Deployable {
             });
             return;
         }
-        let payload: Slice = msg.forwardPayload;
         self.nftAddress = sender();
-        self.lockEndTime = payload.loadUint(32) + now();
+        self.lockEndTime = msg.forwardPayload.loadUint(32) + now();
         self.nftOwner = msg.prevOwner;
     }   
 
