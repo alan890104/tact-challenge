@@ -158,6 +158,7 @@ contract Task3 with Deployable {
     } else {
       // received a different jetton (neither A nor B), throw an error
       throw(0xffffff);
+      return;
     }
   } 
   
