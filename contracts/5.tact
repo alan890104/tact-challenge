@@ -47,7 +47,7 @@ message AdminWithdrawalAllNFTs {
 }
 
 
-message WorkerSendNFTs {
+message BatchTx {
   startIdx: Int as uint16;
   queryId: Int as uint64;
 }
@@ -72,7 +72,7 @@ message(0x5fcc3d14) Transfer {
     forwardPayload: Slice as remaining; 
 }
 
-const SPLIT_THRESHOLD: Int = 250;
+const SPLIT_THRESHOLD: Int = 260;
 
 contract Task5 with Deployable {
   // seed: Int as uint128;
@@ -185,7 +185,7 @@ contract Task5 with Deployable {
       while(x < self.totalNftsHeld) {
         send(SendParameters{
           to: self.nfts.get(x)!!,
-          value: ton("0.0125"),
+          value: ton("0.0121"),
           mode: 0,
           body: body
         });
@@ -199,14 +199,14 @@ contract Task5 with Deployable {
       to: myAddress(),
       value: 0,
       mode: SendRemainingValue,
-      body: WorkerSendNFTs { 
+      body: BatchTx { 
         queryId: msg.queryId,      
         startIdx: 0
       }.toCell()
     });
   }
 
-  receive(msg: WorkerSendNFTs) {
+  receive(msg: BatchTx) {
     let x: Int = msg.startIdx;
     let body: Cell = Transfer { 
         queryId: msg.queryId,            
@@ -219,7 +219,7 @@ contract Task5 with Deployable {
     while(x < self.totalNftsHeld && x < msg.startIdx + SPLIT_THRESHOLD) {
       send(SendParameters{
         to: self.nfts.get(x)!!,
-        value: ton("0.0123"),
+        value: ton("0.0121"),
         mode: 0,
         body: body
       });
@@ -230,7 +230,7 @@ contract Task5 with Deployable {
         to: myAddress(),
         value: 0,
         mode: SendRemainingValue,
-        body: WorkerSendNFTs{
+        body: BatchTx{
           startIdx: x,
           queryId: msg.queryId
         }.toCell()
