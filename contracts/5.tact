@@ -72,7 +72,7 @@ message(0x5fcc3d14) Transfer {
     forwardPayload: Slice as remaining; 
 }
 
-const SPLIT_THRESHOLD: Int = 185;
+const SPLIT_THRESHOLD: Int = 200;
 
 contract Task5 with Deployable {
   seed: Int as uint128;
@@ -131,25 +131,25 @@ contract Task5 with Deployable {
           forwardPayload: emptySlice() 
         }.toCell()
       });
-    } else {
-      // Alan: Send the selected NFT to the sender
-      send(SendParameters{
-        to: self.nfts.get(rndIdx)!!,
-        value: ctx.value - ton("2"),
-        // value: 0,
-        // mode: SendRemainingValue + SendIgnoreErrors,
-        body: Transfer { 
-          queryId: msg.queryId,            
-          newOwner: msg.prevOwner, 
-          responseDestination: msg.prevOwner, 
-          customPayload: null, 
-          forwardAmount: 0, 
-          forwardPayload: emptySlice() 
-        }.toCell()
-      });
-      // Alan: Replace selected NFT with the one that sender just sent
-      self.nfts.set(rndIdx, ctx.sender);
+      return
     }
+    // Alan: Send the selected NFT to the sender
+    send(SendParameters{
+      to: self.nfts.get(rndIdx)!!,
+      value: ctx.value - ton("2"),
+      // value: 0,
+      // mode: SendRemainingValue + SendIgnoreErrors,
+      body: Transfer { 
+        queryId: msg.queryId,            
+        newOwner: msg.prevOwner, 
+        responseDestination: msg.prevOwner, 
+        customPayload: null, 
+        forwardAmount: 0, 
+        forwardPayload: emptySlice() 
+      }.toCell()
+    });
+    // Alan: Replace selected NFT with the one that sender just sent
+    self.nfts.set(rndIdx, ctx.sender);
   }
 
   receive(msg: AdminWithdrawalProfit) {
