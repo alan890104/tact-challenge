@@ -60,7 +60,7 @@ contract Task4 with Deployable {
         if(self.nftAddress != null) {
             // return nft back to sender
             send(SendParameters{
-                to: context().sender,
+                to: sender(),
                 value: 0,
                 mode: SendRemainingValue,
                 body: Transfer { 
@@ -75,7 +75,7 @@ contract Task4 with Deployable {
             return;
         }
         let payload: Slice = msg.forwardPayload;
-        self.nftAddress = context().sender;
+        self.nftAddress = sender();
         self.lockEndTime = payload.loadUint(32) + now();
         self.nftOwner = msg.prevOwner;
     }   
@@ -109,7 +109,6 @@ receive(msg: NftWithdrawal) {
         to: sender,
         value: 0,
         mode: SendRemainingBalance
-        // body: "NFT is still locked".asComment()
     });
     self.nftAddress = null;
     self.nftOwner = null;
