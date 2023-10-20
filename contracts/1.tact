@@ -18,10 +18,10 @@ message Subtract {
 }
 
 contract Task1 with Deployable {
-    counter: Int as int32 = 0;
+    counter: Int as int32;
 
     init() {
-      // self.counter = 0;
+      self.counter = 0;
     }
 
     receive(msg: Add) {

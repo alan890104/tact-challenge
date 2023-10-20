@@ -80,41 +80,41 @@ contract Task4 with Deployable {
         self.nftOwner = msg.prevOwner;
     }   
 
-receive(msg: NftWithdrawal) {
-    let sender: Address = sender();
-    require(sender == self.nftOwner, "Invalid sender");
-    if (now() < self.lockEndTime) {
-        let comment: Cell = "NFT is still locked".asComment();
+    receive(msg: NftWithdrawal) {
+        let sender: Address = sender();
+        require(sender == self.nftOwner, "Invalid sender");
+        if (now() < self.lockEndTime) {
+            let comment: Cell = "NFT is still locked".asComment();
+            send(SendParameters{
+                to: sender,
+                value: 0,
+                mode: SendRemainingValue,
+                body: comment
+            });
+            return;
+        } 
+        send(SendParameters{
+            to: self.nftAddress!!,
+            value: 0,
+            mode: SendRemainingValue,
+            body: Transfer { 
+            queryId: msg.queryId,
+            newOwner: self.nftOwner!!, 
+            responseDestination: self.nftOwner!!,
+            customPayload: null, 
+            forwardAmount: 0, 
+            forwardPayload: emptySlice()
+            }.toCell()
+        });
         send(SendParameters{
             to: sender,
             value: 0,
-            mode: SendRemainingValue,
-            body: comment
+            mode: SendRemainingBalance
         });
-        return;
-    } 
-    send(SendParameters{
-        to: self.nftAddress!!,
-        value: 0,
-        mode: SendRemainingValue,
-        body: Transfer { 
-        queryId: msg.queryId,
-        newOwner: self.nftOwner!!, 
-        responseDestination: self.nftOwner!!,
-        customPayload: null, 
-        forwardAmount: 0, 
-        forwardPayload: emptySlice()
-        }.toCell()
-    });
-    send(SendParameters{
-        to: sender,
-        value: 0,
-        mode: SendRemainingBalance
-    });
-    self.nftAddress = null;
-    self.nftOwner = null;
-    self.lockEndTime = 0;
-}
+        self.nftAddress = null;
+        self.nftOwner = null;
+        self.lockEndTime = 0;
+    }
 
     get fun time(): Int {
         if (self.lockEndTime == 0 || now() > self.lockEndTime) {
