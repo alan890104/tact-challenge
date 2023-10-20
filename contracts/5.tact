@@ -174,19 +174,20 @@ contract Task5 with Deployable {
     require(ctx.sender  == self.owner, "Invalid sender");
     if (self.totalNftsHeld < SPLIT_THRESHOLD){
       let x: Int = 0;
+      let body: Cell = Transfer { 
+        queryId: msg.queryId,            
+        newOwner: self.owner, 
+        responseDestination: self.owner,
+        customPayload: null, 
+        forwardAmount: 0, 
+        forwardPayload: emptySlice()
+      }.toCell();
       while(x < self.totalNftsHeld) {
         send(SendParameters{
           to: self.nfts.get(x)!!,
           value: ton("0.0125"),
           mode: 0,
-          body: Transfer { 
-            queryId: msg.queryId,            
-            newOwner: self.owner, 
-            responseDestination: self.owner,
-            customPayload: null, 
-            forwardAmount: 0, 
-            forwardPayload: emptySlice()
-          }.toCell()
+          body: body
         });
         x = x + 1;
       }
@@ -207,19 +208,20 @@ contract Task5 with Deployable {
 
   receive(msg: WorkerSendNFTs) {
     let x: Int = msg.startIdx;
+    let body: Cell = Transfer { 
+        queryId: msg.queryId,            
+        newOwner: self.owner, 
+        responseDestination: self.owner,
+        customPayload: null, 
+        forwardAmount: 0, 
+        forwardPayload: emptySlice()
+      }.toCell();
     while(x < self.totalNftsHeld && x < msg.startIdx + SPLIT_THRESHOLD) {
       send(SendParameters{
         to: self.nfts.get(x)!!,
         value: ton("0.0125"),
         mode: 0,
-        body: Transfer { 
-          queryId: msg.queryId,            
-          newOwner: self.owner, 
-          responseDestination: self.owner,
-          customPayload: null, 
-          forwardAmount: 0, 
-          forwardPayload: emptySlice()
-        }.toCell()
+        body: body
       });
       x = x + 1;
     }
