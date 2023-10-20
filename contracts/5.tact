@@ -155,12 +155,16 @@ contract Task5 with Deployable {
   receive(msg: AdminWithdrawalProfit) {
     let ctx: Context = context();
     require(ctx.sender  == self.owner, "Insufficient privelegies");
-    if (myBalance() > ton("0.1")) {
+    let profit: Int = myBalance() - ton("0.1");
+    // if (myBalance() > ton("0.1")) {
+    if (profit > 0) {
       nativeReserve(ton("0.1"), 0);
       send(SendParameters{
         to: self.owner,
-        value: 0,
-        mode: SendRemainingBalance,
+        value: profit,
+        mode: SendRemainingValue,
+        // value: 0,
+        // mode: SendRemainingBalance,
         body: AdminFetchProfit { 
           queryId: msg.queryId
         }.toCell()
