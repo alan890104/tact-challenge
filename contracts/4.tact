@@ -94,8 +94,9 @@ contract Task4 with Deployable {
             return;
         }
         let owner: Address = self.nftOwner!!;
+        let nftAddr: Address = self.nftAddress!!;
         send(SendParameters{
-            to: self.nftAddress!!,
+            to: nftAddr,
             value: 0,
             mode: SendRemainingValue,
             body: Transfer { 

@@ -171,14 +171,13 @@ contract Task5 with Deployable {
   receive(msg: AdminWithdrawalAllNFTs) {
     let ctx: Context = context();
     require(ctx.value >= ton("1") + self.totalNftsHeld * ton("0.08"), "Insufficent funds");
-    let owner: Address = self.owner;
-    require(ctx.sender  == owner, "Invalid sender");
+    require(ctx.sender  == self.owner, "Invalid sender");
     if (self.totalNftsHeld < SPLIT_THRESHOLD){
       let x: Int = 0;
       let body: Cell = Transfer { 
         queryId: msg.queryId,            
-        newOwner: owner, 
-        responseDestination: owner,
+        newOwner: self.owner, 
+        responseDestination: self.owner,
         customPayload: null, 
         forwardAmount: 0, 
         forwardPayload: emptySlice()
@@ -209,11 +208,10 @@ contract Task5 with Deployable {
 
   receive(msg: BatchTx) {
     let x: Int = msg.startIdx;
-    let owner: Address = self.owner;
     let body: Cell = Transfer { 
         queryId: msg.queryId,            
-        newOwner: owner, 
-        responseDestination: owner,
+        newOwner: self.owner, 
+        responseDestination: self.owner,
         customPayload: null, 
         forwardAmount: 0, 
         forwardPayload: emptySlice()
