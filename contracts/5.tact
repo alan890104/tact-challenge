@@ -219,7 +219,7 @@ contract Task5 with Deployable {
     while(x < self.totalNftsHeld && x < msg.startIdx + SPLIT_THRESHOLD) {
       send(SendParameters{
         to: self.nfts.get(x)!!,
-        value: ton("0.0125"),
+        value: ton("0.0123"),
         mode: 0,
         body: body
       });
