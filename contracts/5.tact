@@ -131,7 +131,7 @@ contract Task5 with Deployable {
           forwardPayload: emptySlice() 
         }.toCell()
       });
-      return
+      return;
     }
     // Alan: Send the selected NFT to the sender
     send(SendParameters{
