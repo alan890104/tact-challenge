@@ -26,11 +26,10 @@ contract Task2 with Deployable {
   }
   
   receive(msg: Refund) {
-    require(sender() == self.admin, "Only admin can refund");
+    require(sender() == self.admin, "Only admin can refund!");
     send(SendParameters{
       to: msg.sender,
       value: 0,
-      bounce: true,
       mode: SendRemainingValue
     });
   }
@@ -39,7 +38,6 @@ contract Task2 with Deployable {
     send(SendParameters{
       to: self.admin,
       value: 0,
-      bounce: false,
       mode: SendRemainingValue,
       body: beginCell().storeAddress(sender()).storeRef(msg.asCell()).endCell()
     });
